@@ -13,8 +13,8 @@
 - They optionally add a **short note** about their mood.
 
 --> **Possible User Choices:**
-✔ **Proceed** to mindfulness exercise.  
-✔ **Exit** the app after check-in (basic use case).  
+- **Proceed** to mindfulness exercise.  
+- **Exit** the app after check-in (basic use case).  
 
 ---
 
@@ -27,8 +27,8 @@
   - **Sad → Self-compassion meditation**  
 
 --> **Possible User Choices:**
-✔ **Proceed** to journaling.  
-✔ **Exit** after the mindfulness exercise.  
+- **Proceed** to journaling.  
+- **Exit** after the mindfulness exercise.  
 
 ---
 
@@ -37,8 +37,8 @@
 - The user **can write a response or just reflect**.
 
 --> **Possible User Choices:**
-✔ Write and save a response.  
-✔ Skip journaling and **finish the session**.  
+- Write and save a response.  
+- Skip journaling and **finish the session**.  
 
 ---
 
