@@ -5,8 +5,8 @@ Mindfulness Tracker is a simple, intuitive app designed to support others
 take a moment to check in with themselves. 
 
 It provides:
-- A **mood chek-in** to reflect on emotions
-- A **minfulness or yoga exercise** for grounding
+- A **mood check-in** to reflect on emotions
+- A **mindfulness or yoga exercise** for grounding
 - A **journaling prompt** for deeper self-reflection
 
 > Read more about the vision:
@@ -14,15 +14,8 @@ It provides:
 
 ## Features 
 **Mood Tracking**,
-**Mindfuleness Excercise**,
+**Mindfulness Exercise**,
 **Journal Prompt**
-
-**Future Features I'd like to add**
-- mood history visualization
-- personalized suggestions based on past moods
-- daily reminders
-
---
 
 ## Current Tech Stack:
 - **Backend:** Flask (Python)
@@ -33,3 +26,10 @@ It provides:
 - [User Flow] (docs/user-flow.md)
 - [Database Schema] (docs/database-schema.md)
 - [Wireframe] (docs/wireframe.png) -- will add later
+
+-----------------------
+
+**Future Features I'd like to add**
+- mood history visualization
+- personalized suggestions based on past moods
+- daily reminders
