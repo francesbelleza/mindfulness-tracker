@@ -32,4 +32,4 @@ It provides:
 ## Additional Docs
 - [User Flow] (docs/user-flow.md)
 - [Database Schema] (docs/database-schema.md)
-- [Wireframe] (docs/wireframe.png)
+- [Wireframe] (docs/wireframe.png) -- will add later
