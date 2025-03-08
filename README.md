@@ -13,8 +13,8 @@ It provides:
 > **[My Blog Post](https://medium.com/@belleza.frances/my-app-development-journey-high-level-vision-from-ideation-to-planning-d6b0bbc3fc66)**
 
 ## Features 
-**Mood Tracking**
-**Mindfuleness Excercise**
+**Mood Tracking**,
+**Mindfuleness Excercise**,
 **Journal Prompt**
 
 **Future Features I'd like to add**
@@ -30,6 +30,6 @@ It provides:
 - **Database:** SQLite/PostgreSQL
 
 ## Additional Docs
-- [User Flow]
-- [Database Schema]
-- [Wireframe]
+- [User Flow] (docs/user-flow.md)
+- [Database Schema] (docs/database-schema.md)
+- [Wireframe] (docs/wireframe.png)
