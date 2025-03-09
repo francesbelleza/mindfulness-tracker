@@ -1,0 +1,37 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    margin: 50px;
+    background-color: white;
+    color: black;
+}
+
+h1 {
+    color: #BF5700;
+    font-weight: 600;
+    font-size: 2,5rem;
+}
+
+p {
+    font-size: 18px;
+    color: black;
+}
+
+.button {
+    background-color: #BF5700;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    cusor: pointer;
+    font-size: 16px;
+    border-radius: 30px;
+    transition: background 0.3s; ease-in-out;
+    font-weight: 500;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #A54400;
+    transform: scale(1.05);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
