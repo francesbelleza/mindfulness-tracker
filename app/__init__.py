@@ -10,3 +10,6 @@ app = Flask(__name__, static_folder="../static") #creates flask app
 
 #imports my routes
 from app import mindfulness_tracker_app
+
+
+##RANDOM
