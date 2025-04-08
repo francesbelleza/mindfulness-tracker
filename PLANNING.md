@@ -67,11 +67,11 @@ and intentional flow.
 ## sprint breakdown
 
 ### Sprint 0: Dev Environment + Cloud Setup
-- [ ] Set up local virtual environment (venv)
-- [ ] Install dependencies: Flask, Flask-Login, SQLAlchemy
-- [ ] Initialize Git repo & connect to GitHub
-- [ ] Create `requirements.txt` for version tracking
-- [ ] Create `.env` file and `config.py` to store DB credentials
+- [x] Set up local virtual environment (venv)
+- [x] Install dependencies: Flask, Flask-Login, SQLAlchemy
+- [x] Initialize Git repo & connect to GitHub
+- [x] Create `requirements.txt` for version tracking
+- [x] Create `.env` file and `config.py` to store DB credentials
 - [ ] Set up free PostgreSQL instance on Render (or Railway)
 - [ ] Replace SQLite URI with cloud PostgreSQL URI in `config.py`
 - [ ] Run a test to confirm cloud DB connection is working
