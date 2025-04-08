@@ -1,19 +1,21 @@
-# Created by Frances Belleza -  Mindfulness Tracker
-#
-# File: app/ __init__.py
-# Function: This file creates a flask app
+# By Frances Belleza
+# initialize to be a lib
 
 import os
-from flask import Flask #renders template
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from app.config import Config
 
-app = Flask(__name__, static_folder="../static") #creates flask app
+db = SQLAlchemy()
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    db.init_app(app)
+
+    return app
 
 #imports my routes
 from app import mindfulness_tracker_app
 
-
-##RANDOM
-## TESTING AGAIN
-
-###### TESTING TESTING TESINGGGG
-## MEEP
