@@ -18,4 +18,3 @@ def create_app():
 
 #imports my routes
 from app import mindfulness_tracker_app
-
