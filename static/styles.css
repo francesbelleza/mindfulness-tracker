@@ -1,37 +1,38 @@
+/* static/styles.css */
+
 body {
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    margin: 50px;
-    background-color: white;
-    color: black;
+  font-family: Tahoma, sans-serif;
 }
 
-h1 {
-    color: #BF5700;
-    font-weight: 600;
-    font-size: 2,5rem;
+/* Burnt-orange primary buttons */
+.btn-primary {
+  background-color: #C3521A;
+  border-color: #C3521A;
 }
 
-p {
-    font-size: 18px;
-    color: black;
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #a34317;
+  border-color: #a34317;
 }
 
-.button {
-    background-color: #BF5700;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    cusor: pointer;
-    font-size: 16px;
-    border-radius: 30px;
-    transition: background 0.3s; ease-in-out;
-    font-weight: 500;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+/* Links in burnt orange */
+a {
+  color: #C3521A;
+}
+a:hover {
+  color: #a34317;
 }
 
-.button:hover {
-    background-color: #A54400;
-    transform: scale(1.05);
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+/* Form fields: subtle shadow and border */
+.form-control {
+  border: 1px solid #ccc;
+  box-shadow: none;
+  border-radius: 0.25rem;
+}
+
+/* Headings in burnt orange */
+h1, h2, h3, h4, h5, h6 {
+  color: #C3521A;
+  font-family: Tahoma, sans-serif;
 }

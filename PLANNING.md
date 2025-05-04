@@ -80,11 +80,11 @@ and intentional flow.
 ---
 
 ### Sprint 1: User Authentication System
-- [ ] Create `User` model (username, email, hashed password)
-- [ ] Implement Flask-Login for session management
-- [ ] Build `/signup`, `/login`, and `/logout` routes
-- [ ] Add redirects after login/logout
-- [ ] Protect routes with `@login_required`
+- [x] Create `User` model (username, email, hashed password)
+- [x] Implement Flask-Login for session management
+- [x] Build `/signup`, `/login`, and `/logout` routes
+- [x] Add redirects after login/logout
+- [x] Protect routes with `@login_required`
 
 ---
 
