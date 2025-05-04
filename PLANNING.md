@@ -72,10 +72,10 @@ and intentional flow.
 - [x] Initialize Git repo & connect to GitHub
 - [x] Create `requirements.txt` for version tracking
 - [x] Create `.env` file and `config.py` to store DB credentials
-- [ ] Set up free PostgreSQL instance on Render (or Railway)
-- [ ] Replace SQLite URI with cloud PostgreSQL URI in `config.py`
-- [ ] Run a test to confirm cloud DB connection is working
-- [ ] Add `.env` to `.gitignore` so credentials stay private
+- [x] Set up free PostgreSQL instance on Render (or Railway)
+- [x] Replace SQLite URI with cloud PostgreSQL URI in `config.py`
+- [x] Run a test to confirm cloud DB connection is working
+- [x] Add `.env` to `.gitignore` so credentials stay private
 
 ---
 
