@@ -3,6 +3,7 @@
 #              it defines my routes & logic
 
 from flask import render_template
+from app.models import TestModel
 
 def initial_routes(app):
     @app.route('/mindfulness-tracker-home')
