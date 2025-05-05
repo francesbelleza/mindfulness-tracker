@@ -1,0 +1,13 @@
+/* burnt-orange primary buttons */
+.btn-primary {
+  background-color: #C3521A;
+  border-color: #C3521A;
+}
+.btn-primary:hover {
+  background-color: #a34317;
+}
+
+/* headings in burnt-orange */
+h1, h2, .display-4 {
+  color: #C3521A;
+}
