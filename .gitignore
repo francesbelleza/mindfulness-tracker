@@ -5,3 +5,5 @@ instance/
 .vscode/
 *.sqlite3
 venv/
+.DS_Store
+
