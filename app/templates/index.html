@@ -2,13 +2,187 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-  <div class="text-center py-5">
-    <h1 class="display-4">welcome to recalibrate</h1>
-    <p class="lead">Take a moment to check in with yourself.</p>
-    <a href="{{ url_for('check_in') }}"
-       class="btn btn-primary btn-lg mt-4">
-      Start Check-In
-    </a>
+<div class="landing-container">
+  <div class="hero-section text-center">
+    <div class="mindfulness-icon mb-4">🌿</div>
+
+    <h1 class="display-3 mb-4" style="color: #C3521A; font-weight: 700; letter-spacing: -0.5px;">
+      welcome to recalibrate
+    </h1>
+
+    <p class="lead mb-5" style="font-size: 1.3rem; color: #6c757d; max-width: 600px; margin: 0 auto;">
+      Take a moment to pause, breathe, and check in with yourself.
+    </p>
+
+    {% if current_user.is_authenticated %}
+      <div class="cta-buttons">
+        <a href="{{ url_for('check_in') }}" class="btn btn-primary btn-lg shadow-lg"
+           style="border-radius: 12px; padding: 16px 48px; font-size: 1.1rem;">
+          Start Daily Check-In
+        </a>
+      </div>
+
+      <div class="welcome-back mt-4">
+        <p style="color: #6c757d; font-size: 0.95rem;">
+          Welcome back, <strong style="color: #C3521A;">{{ current_user.username }}</strong> 👋
+        </p>
+      </div>
+    {% else %}
+      <div class="cta-buttons">
+        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg shadow-lg me-3"
+           style="border-radius: 12px; padding: 16px 48px; font-size: 1.1rem;">
+          Get Started
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg"
+           style="border-radius: 12px; padding: 16px 48px; font-size: 1.1rem;">
+          Log In
+        </a>
+      </div>
+    {% endif %}
   </div>
+
+  <!-- Features Section -->
+  <div class="features-section mt-5 pt-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h5>Daily Check-Ins</h5>
+          <p>Track your mood and physical wellbeing every day</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">🧘</div>
+          <h5>Mindful Practices</h5>
+          <p>Get personalized mindfulness exercises</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h5>Track Progress</h5>
+          <p>Visualize your mindfulness journey over time</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.landing-container {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 75vh;
+}
+
+.hero-section {
+  padding: 40px 0;
+}
+
+.mindfulness-icon {
+  font-size: 5rem;
+  animation: sway 4s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(195, 82, 26, 0.3) !important;
+}
+
+.btn-outline-primary {
+  border: 2px solid #C3521A;
+  color: #C3521A;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background: #C3521A;
+  border-color: #C3521A;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.features-section {
+  padding-top: 60px;
+  border-top: 1px solid #e9ecef;
+}
+
+.feature-card {
+  background: white;
+  border: 2px solid #f1f3f5;
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.feature-card:hover {
+  border-color: #C3521A;
+  box-shadow: 0 8px 24px rgba(195, 82, 26, 0.1);
+  transform: translateY(-4px);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.feature-card h5 {
+  color: #212529;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .landing-container {
+    padding: 40px 20px;
+  }
+
+  .mindfulness-icon {
+    font-size: 4rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+    margin: 0 !important;
+  }
+}
+</style>
 {% endblock %}
 

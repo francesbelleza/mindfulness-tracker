@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Daily Check-In{% endblock %}
+
+{% block content %}
+<div class="check-in-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3" style="color: #C3521A; font-weight: 600;">How are you feeling today?</h1>
+    <p class="text-muted">Take a moment to check in with yourself</p>
+  </div>
+
+  <form method="POST" action="{{ url_for('check_in') }}" class="mx-auto" style="max-width: 600px;">
+
+    <!-- Mood Selection -->
+    <div class="mb-5">
+      <label class="form-label d-block text-center mb-4" style="font-size: 1.1rem; font-weight: 500;">
+        Select your mood
+      </label>
+
+      <div class="mood-grid">
+        <!-- Happy -->
+        <input type="radio" class="btn-check" name="mood" id="mood-happy" value="Happy" required>
+        <label class="mood-card" for="mood-happy">
+          <div class="mood-emoji">😊</div>
+          <div class="mood-label">Happy</div>
+        </label>
+
+        <!-- Calm -->
+        <input type="radio" class="btn-check" name="mood" id="mood-calm" value="Calm" required>
+        <label class="mood-card" for="mood-calm">
+          <div class="mood-emoji">😌</div>
+          <div class="mood-label">Calm</div>
+        </label>
+
+        <!-- Anxious -->
+        <input type="radio" class="btn-check" name="mood" id="mood-anxious" value="Anxious" required>
+        <label class="mood-card" for="mood-anxious">
+          <div class="mood-emoji">😰</div>
+          <div class="mood-label">Anxious</div>
+        </label>
+
+        <!-- Sad -->
+        <input type="radio" class="btn-check" name="mood" id="mood-sad" value="Sad" required>
+        <label class="mood-card" for="mood-sad">
+          <div class="mood-emoji">😔</div>
+          <div class="mood-label">Sad</div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Body Feeling (Optional) -->
+    <div class="mb-4">
+      <label class="form-label" style="font-weight: 500;">
+        How does your body feel? <span class="text-muted">(optional)</span>
+      </label>
+      <textarea
+        name="body_feeling"
+        class="form-control"
+        rows="3"
+        placeholder="e.g., tense shoulders, energized, tired..."
+        style="resize: none;"></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 14px;">
+        Complete Check-In
+      </button>
+    </div>
+  </form>
+</div>
+
+<style>
+.check-in-container {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mood-card {
+  background: white;
+  border: 3px solid #e9ecef;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.mood-card:hover {
+  transform: translateY(-4px);
+  border-color: #C3521A;
+  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.15);
+}
+
+.btn-check:checked + .mood-card {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border-color: #C3521A;
+  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+}
+
+.btn-check:checked + .mood-card .mood-emoji,
+.btn-check:checked + .mood-card .mood-label {
+  filter: brightness(0) invert(1);
+}
+
+.mood-emoji {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.mood-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #C3521A;
+  box-shadow: 0 0 0 0.2rem rgba(195, 82, 26, 0.15);
+}
+
+@media (max-width: 576px) {
+  .mood-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .mood-emoji {
+    font-size: 2.5rem;
+  }
+
+  .check-in-container {
+    padding: 20px 10px;
+  }
+}
+</style>
+{% endblock %}

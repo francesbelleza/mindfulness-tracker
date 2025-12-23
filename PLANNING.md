@@ -1,43 +1,51 @@
 # planning
 
+## 📊 Current Progress: Sprint 2 Complete! 🎉
+
+**Completed:** Sprint 0, Sprint 1, Sprint 2
+**Next Up:** Sprint 3 - AI Integration
+**Overall MVP Progress:** ~40% complete
+
+---
+
 ## overview
-This project is a mindfulness-based web application that invites 
-users to check in with themselves once a day. Through mood selection, 
-AI-powered suggestions, and reflective journaling, the app fosters 
-emotional awareness and grounding. The goal is to provide practices 
-and prompts that meet users where they are, using thoughtful design 
+This project is a mindfulness-based web application that invites
+users to check in with themselves once a day. Through mood selection,
+AI-powered suggestions, and reflective journaling, the app fosters
+emotional awareness and grounding. The goal is to provide practices
+and prompts that meet users where they are, using thoughtful design
 and intentional flow.
 
 ---
 
 ## High-Level MVP Goals
 
-[] **User Authentication System**  
+[✅] **User Authentication System**
   - Users can sign up, log in, and log out securely. Only logged-in users can access core features.
 
-[]**1x Daily Mood Check-In**  
+[✅] **1x Daily Mood Check-In**
   - Users can check in once per day with a mood emoji and an optional body feeling. Repeat check-ins are gently blocked until the next day.
 
-[] **AI-Powered Practice Suggestions (via Wrapper)**  
+[⏳] **AI-Powered Practice Suggestions (via Wrapper)** ← NEXT (Sprint 3)
   - After checking in, the app uses an AI wrapper (like OpenAI or Claude) to suggest one mindfulness practice and one journal prompt based on the user's mood and internal research mappings.
 
-[] **Practice Display Page**  
+[⏳] **Practice Display Page** ← Sprint 3
   - The selected mindfulness practice is shown on a dedicated page with a written description and (optionally) an image, audio, or video link to guide the user through the practice.
 
-[] **Journal Reflection Page**  
+[] **Journal Reflection Page** ← Sprint 4
   - Users are given a journal prompt and can respond in a text box. Their reflections are saved securely.
 
-[] **Feedback System**  
+[] **Feedback System** ← Sprint 4
   - After journaling, users are asked to rate how the practice felt using emojis or a simple rating. This will help future personalization.
 
-[] **Thank You / Closing Page**  
-  - The app ends each session with a calming “Thank you” message or affirmation, creating closure for the user.
+[] **Thank You / Closing Page** ← Sprint 4
+  - The app ends each session with a calming "Thank you" message or affirmation, creating closure for the user.
 
-[] **Basic UI & Styling**  
+[✅] **Basic UI & Styling**
   - A clean, mobile-friendly interface using a burnt orange/white/black color palette with emoji-based interactions.
 
-[] **Cloud-Based Data Storage**  
-  - User check-ins, reflections, and feedback are stored in a cloud-hosted PostgreSQL database (via Render), making the app scalable and persistent beyond local development.
+[✅] **Cloud-Based Data Storage**
+  - User check-ins, reflections, and feedback are stored in SQLite locally (PostgreSQL available for deployment via Render), making the app scalable and persistent beyond local development.
 
 ---
 
@@ -88,24 +96,45 @@ and intentional flow.
 
 ---
 
-### Sprint 2: Daily Mood Check-In
-- [ ] Create `CheckIn` model (mood, body_feeling, created_at, user_id)
-- [ ] Build `/check-in` route + form (emoji mood + optional body input)
-- [ ] Add logic to allow one check-in per day
-  - [ ] If already checked in → redirect to `/already-checked-in`
-  - [ ] Else → save and redirect to `/practice`
+### ✅ Sprint 2: Daily Mood Check-In (COMPLETED)
+- [x] Create `CheckIn` model (mood, body_feeling, created_at, user_id)
+- [x] Build `/check-in` route + form (emoji mood + optional body input)
+- [x] Add logic to allow one check-in per day
+  - [x] If already checked in → redirect to `/already-checked-in`
+  - [x] Else → save and redirect to `/practice`
+- [x] Beautiful UI with emoji mood selector (😊 😌 😰 😔)
+- [x] Smooth animations and transitions
+- [x] Mobile-responsive design
+- [x] Practice page placeholder created
 
 ---
 
-### Sprint 3: AI Suggestion Logic + Practice Page
-- [ ] Create `practices`, `journal_prompts`, and `research_data` tables
-- [ ] Add AI wrapper
-- [ ] Create prompt logic using mood, tags, and research data
-- [ ] Parse AI response to extract one practice and one prompt
-- [ ] Create `/practice` route and template:
-  - Show title, description
-  - Optional image or video link
-  - “Continue to Journal” button
+### ⏳ Sprint 3: AI Suggestion Logic + Practice Page (NEXT)
+**Goal:** Integrate OpenAI API to generate personalized mindfulness practices and journal prompts based on user's mood.
+
+**Tasks:**
+- [ ] Set up OpenAI API integration
+  - [ ] Add OpenAI API key to `.env`
+  - [ ] Install `openai` Python package
+  - [ ] Create AI service module for API calls
+- [ ] Create database models:
+  - [ ] `Practice` model (exercise suggestions)
+  - [ ] `JournalPrompt` model (reflection prompts)
+- [ ] Update `/practice` route:
+  - [ ] Fetch user's latest check-in (mood + body feeling)
+  - [ ] Call OpenAI API with mood-based prompt
+  - [ ] Parse AI response to extract practice + journal prompt
+  - [ ] Store practice and prompt in database
+  - [ ] Display on practice page
+- [ ] Enhance `/practice` template:
+  - [ ] Show AI-generated mindfulness practice
+  - [ ] Display journal prompt
+  - [ ] Add "Continue to Journal" button → `/reflect`
+  - [ ] Optional: Add practice category icons/tags
+- [ ] Create AI prompt engineering:
+  - [ ] Design system prompt for mindfulness practices
+  - [ ] Map moods to practice types (breathing, meditation, movement, etc.)
+  - [ ] Ensure responses are calming, supportive, and actionable
 
 ---
 
