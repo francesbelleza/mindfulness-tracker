@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Mindfulness Practice{% endblock %}
+
+{% block content %}
+<div class="practice-container">
+  <div class="text-center">
+    <div class="meditation-icon mb-4">
+      🧘‍♀️
+    </div>
+
+    <h1 class="display-5 mb-3" style="color: #C3521A; font-weight: 600;">
+      Mindfulness Practices
+    </h1>
+
+    <p class="lead text-muted mb-5">
+      AI-powered personalized suggestions coming soon in Sprint 3!
+    </p>
+
+    <div class="placeholder-card mx-auto mb-5">
+      <h5 style="color: #C3521A; margin-bottom: 16px;">🚧 Under Construction</h5>
+      <p style="color: #6c757d; margin-bottom: 0;">
+        This page will soon feature personalized mindfulness exercises and journal prompts
+        tailored to your daily mood check-ins.
+      </p>
+    </div>
+
+    <div class="quick-tips mx-auto mb-5">
+      <h6 style="font-weight: 600; margin-bottom: 16px;">In the meantime, try these quick mindfulness tips:</h6>
+      <ul class="text-start" style="color: #495057; line-height: 1.8;">
+        <li>Take 5 deep breaths, counting to 4 on each inhale and exhale</li>
+        <li>Notice 5 things you can see, 4 you can touch, 3 you can hear</li>
+        <li>Spend 2 minutes stretching or moving gently</li>
+        <li>Write down 3 things you're grateful for today</li>
+      </ul>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 12px 32px;">
+      Back to Home
+    </a>
+  </div>
+</div>
+
+<style>
+.practice-container {
+  padding: 60px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  min-height: 60vh;
+}
+
+.meditation-icon {
+  font-size: 5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.placeholder-card {
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe8dc 100%);
+  border: 2px dashed #C3521A;
+  border-radius: 16px;
+  padding: 32px 24px;
+  max-width: 500px;
+}
+
+.quick-tips {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 16px;
+  padding: 28px 32px;
+  max-width: 550px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.quick-tips ul {
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.quick-tips li {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 576px) {
+  .practice-container {
+    padding: 40px 20px;
+  }
+
+  .meditation-icon {
+    font-size: 4rem;
+  }
+
+  .quick-tips {
+    padding: 20px 20px;
+  }
+}
+</style>
+{% endblock %}

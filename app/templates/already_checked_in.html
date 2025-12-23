@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Already Checked In{% endblock %}
+
+{% block content %}
+<div class="already-checked-container">
+  <div class="text-center">
+    <div class="check-mark-circle mb-4">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="38" stroke="#C3521A" stroke-width="4"/>
+        <path d="M25 42L35 52L55 28" stroke="#C3521A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <h1 class="display-5 mb-3" style="color: #C3521A; font-weight: 600;">
+      You've already checked in today!
+    </h1>
+
+    <p class="lead text-muted mb-4">
+      Great job staying mindful. Come back tomorrow for your next check-in.
+    </p>
+
+    <div class="info-card mx-auto mb-4">
+      <p class="mb-2" style="font-size: 0.95rem; color: #6c757d;">
+        ✨ Remember: You can only check in once per day to maintain mindful consistency.
+      </p>
+    </div>
+
+    <div class="button-group mt-5">
+      <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg me-2" style="border-radius: 12px; padding: 12px 32px;">
+        Go Home
+      </a>
+      <a href="{{ url_for('practice') }}" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 12px 32px;">
+        Practice Mindfulness
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+.already-checked-container {
+  padding: 80px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-mark-circle {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.info-card {
+  background: #f8f9fa;
+  border-left: 4px solid #C3521A;
+  padding: 16px 24px;
+  border-radius: 8px;
+  max-width: 500px;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-outline-primary {
+  border-color: #C3521A;
+  color: #C3521A;
+}
+
+.btn-outline-primary:hover {
+  background-color: #C3521A;
+  border-color: #C3521A;
+  color: white;
+}
+
+@media (max-width: 576px) {
+  .already-checked-container {
+    padding: 40px 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .button-group .btn {
+    width: 100%;
+    margin: 0 !important;
+  }
+}
+</style>
+{% endblock %}

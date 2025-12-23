@@ -2,12 +2,11 @@
 # Function: This file is like main()
 #              it defines my routes & logic
 
-from flask import render_template
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
-from app.models import User
+from datetime import datetime, date
+from app.models import User, CheckIn
 from app import db
-#from app.models import TestModel
 
 def initial_routes(app):
     @app.route('/signup', methods=['GET', 'POST'])
@@ -49,11 +48,46 @@ def initial_routes(app):
         flash('You have been logged out.', 'info')
         return redirect(url_for('index'))
 
-    # ensure your other routes are protected as needed
-    @app.route('/check-in')
+    @app.route('/check-in', methods=['GET', 'POST'])
     @login_required
     def check_in():
+        # Check if user already checked in today
+        today = date.today()
+        existing_checkin = CheckIn.query.filter(
+            CheckIn.user_id == current_user.id,
+            db.func.date(CheckIn.created_at) == today
+        ).first()
+
+        if existing_checkin and request.method == 'GET':
+            return redirect(url_for('already_checked_in'))
+
+        if request.method == 'POST':
+            mood = request.form.get('mood')
+            body_feeling = request.form.get('body_feeling', '').strip()
+
+            # Create new check-in
+            checkin = CheckIn(
+                user_id=current_user.id,
+                mood=mood,
+                body_feeling=body_feeling if body_feeling else None
+            )
+            db.session.add(checkin)
+            db.session.commit()
+
+            flash(f'Check-in saved! You\'re feeling {mood.lower()} today.', 'success')
+            return redirect(url_for('practice'))
+
         return render_template('check_in.html')
+
+    @app.route('/already-checked-in')
+    @login_required
+    def already_checked_in():
+        return render_template('already_checked_in.html')
+
+    @app.route('/practice')
+    @login_required
+    def practice():
+        return render_template('practice.html')
 
     @app.route('/')
     def index():
