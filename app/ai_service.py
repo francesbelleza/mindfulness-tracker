@@ -5,13 +5,14 @@ from openai import OpenAI
 from elevenlabs.client import ElevenLabs
 from elevenlabs import save
 
-def generate_practice_and_prompt(mood, body_feeling=None):
+def generate_practice_and_prompt(mood, body_feeling=None, time_of_day=None):
     """
     Generate personalized mindfulness practice and journal prompt using OpenAI.
 
     Args:
         mood (str): User's current mood (Happy, Calm, Anxious, Sad)
         body_feeling (str, optional): User's body sensations
+        time_of_day (str, optional): When checking in (Morning or Night)
 
     Returns:
         dict: Contains 'practice' (dict with title, description, type) and 'journal_prompt' (str)
@@ -26,17 +27,29 @@ def generate_practice_and_prompt(mood, body_feeling=None):
 
     client = OpenAI(api_key=api_key)
 
-    # Build the user message with mood and optional body feeling
+    # Build the user message with mood, body feeling, and time of day
     user_message = f"User's mood: {mood}"
     if body_feeling:
         user_message += f"\nBody feeling: {body_feeling}"
+    if time_of_day:
+        user_message += f"\nTime of day: {time_of_day}"
 
     # System prompt for the AI
-    system_prompt = """You are a compassionate mindfulness meditation teacher. Based on the user's mood and body sensations, create:
+    system_prompt = """You are a compassionate mindfulness meditation teacher. Based on the user's mood, body sensations, and time of day, create:
 1. A guided mindfulness practice (2-4 minutes) with clear, spoken-style instructions
 2. A thoughtful journal prompt for reflection
 
 IMPORTANT: Write the practice description as if you're speaking directly to the user in a calm, guiding voice. Use "you" language and present tense. Make it sound like guided meditation audio that will be read aloud with natural pauses.
+
+NOTE: The user will also receive additional structured questions based on time of day:
+- Morning: "What is your intention for the day?"
+- Night: "What is one thing you did for yourself today?" and "What is one thing you'd like to accomplish tomorrow?"
+So your journal prompt should complement (not duplicate) these questions. Focus on emotional reflection or deeper insights related to their mood and body sensations.
+
+TIME OF DAY GUIDANCE:
+- MORNING practices: Create energizing, grounding practices to start the day with intention. Focus on awakening the body gently, setting intentions, energizing breath work, or morning gratitude. Help them transition into their day with clarity and purpose.
+- NIGHT practices: Create calming, reflective practices to wind down. Focus on releasing the day's tension, restorative breathing, body relaxation, or gentle self-compassion. Help them prepare for restful sleep and let go of the day.
+- If no time specified, create a balanced practice suitable for any time.
 
 CRITICAL PAUSE INSTRUCTIONS - VERY IMPORTANT:
 - Use THREE ellipses (...) for long 3-5 second meditative pauses for breathing (e.g., "Close your eyes... ... ... Take a deep breath")
@@ -55,6 +68,9 @@ Respond ONLY with valid JSON in this exact format:
   },
   "journal_prompt": "A thoughtful question or reflection prompt (1-2 sentences)"
 }
+
+CRITICAL: The "type" field MUST be EXACTLY one of these four words: breathing, meditation, movement, grounding
+DO NOT use any other values like "mindfulness", "reflection", etc.
 
 Guidelines:
 - ALWAYS incorporate their body feelings into the practice if provided

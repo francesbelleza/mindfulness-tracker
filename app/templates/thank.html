@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block title %}Thank You{% endblock %}
+
+{% block content %}
+<div class="thank-container">
+  <div class="text-center">
+    <!-- Icon based on time of day -->
+    <div class="thank-icon mb-4">
+      {% if time_of_day == 'Morning' %}
+        ☀️
+      {% elif time_of_day == 'Night' %}
+        🌙
+      {% else %}
+        ✨
+      {% endif %}
+    </div>
+
+    <!-- Main Message -->
+    <h1 class="display-4 mb-4" style="color: #C3521A; font-weight: 600;">
+      Thank You for Taking Time for Yourself
+    </h1>
+
+    <!-- Time-specific message -->
+    <div class="message-card mx-auto mb-5">
+      {% if time_of_day == 'Morning' %}
+        <p class="message-text">
+          You've started your day with intention and mindfulness.
+          Carry this sense of calm and awareness with you throughout your day.
+        </p>
+        <p class="affirmation">
+          You are grounded, present, and ready for whatever comes your way.
+        </p>
+      {% elif time_of_day == 'Night' %}
+        <p class="message-text">
+          You've taken time to reflect and let go of the day.
+          May you rest peacefully, knowing you showed up for yourself.
+        </p>
+        <p class="affirmation">
+          You deserve rest. Tomorrow is a new beginning.
+        </p>
+      {% else %}
+        <p class="message-text">
+          You've completed your mindfulness practice.
+          Remember, you can always return here to check in with yourself.
+        </p>
+        <p class="affirmation">
+          You are worthy of peace, presence, and self-compassion.
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid mb-5">
+      <div class="stat-card">
+        <div class="stat-icon">✓</div>
+        <div class="stat-label">Session Complete</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💭</div>
+        <div class="stat-label">Journal Saved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-label">Feedback Recorded</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+        Return Home
+      </a>
+    </div>
+
+    <!-- Footer Note -->
+    <p class="footer-note mt-5">
+      Come back anytime you need a moment of mindfulness ✨
+    </p>
+  </div>
+</div>
+
+<style>
+.thank-container {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thank-icon {
+  font-size: 6rem;
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Message Card */
+.message-card {
+  background: linear-gradient(135deg, #fff9f5 0%, #fff 100%);
+  border: 2px solid #f8e8df;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.08);
+  max-width: 650px;
+}
+
+.message-text {
+  font-size: 1.2rem;
+  color: #495057;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+.affirmation {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #C3521A;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(195, 82, 26, 0.05) 0%, rgba(230, 126, 60, 0.05) 100%);
+  border-radius: 12px;
+  border-left: 4px solid #C3521A;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.stat-card {
+  background: white;
+  border: 2px solid #f1f3f5;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+  color: white;
+  text-decoration: none;
+}
+
+.btn-secondary {
+  background: #e9ecef;
+  color: #495057;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  background: #dee2e6;
+  color: #343a40;
+  border-color: #adb5bd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-decoration: none;
+}
+
+/* Footer Note */
+.footer-note {
+  font-size: 1rem;
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .thank-container {
+    padding: 60px 16px;
+  }
+
+  .thank-icon {
+    font-size: 4rem;
+  }
+
+  .message-card {
+    padding: 28px;
+  }
+
+  .message-text {
+    font-size: 1.1rem;
+  }
+
+  .affirmation {
+    font-size: 1.15rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}
+</style>
+{% endblock %}

@@ -10,6 +10,29 @@
 
   <form method="POST" action="{{ url_for('check_in') }}" class="mx-auto" style="max-width: 600px;">
 
+    <!-- Time of Day Selection -->
+    <div class="mb-5">
+      <label class="form-label d-block text-center mb-4" style="font-size: 1.1rem; font-weight: 500;">
+        When are you checking in?
+      </label>
+
+      <div class="time-grid">
+        <!-- Morning -->
+        <input type="radio" class="btn-check" name="time_of_day" id="time-morning" value="Morning" required>
+        <label class="time-card" for="time-morning">
+          <div class="time-emoji">☀️</div>
+          <div class="time-label">Morning</div>
+        </label>
+
+        <!-- Night -->
+        <input type="radio" class="btn-check" name="time_of_day" id="time-night" value="Night" required>
+        <label class="time-card" for="time-night">
+          <div class="time-emoji">🌙</div>
+          <div class="time-label">Night</div>
+        </label>
+      </div>
+    </div>
+
     <!-- Mood Selection -->
     <div class="mb-5">
       <label class="form-label d-block text-center mb-4" style="font-size: 1.1rem; font-weight: 500;">
@@ -77,6 +100,57 @@
   margin: 0 auto;
 }
 
+/* Time of Day Grid */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.time-card {
+  background: white;
+  border: 3px solid #e9ecef;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.time-card:hover {
+  transform: translateY(-4px);
+  border-color: #C3521A;
+  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.15);
+}
+
+.btn-check:checked + .time-card {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border-color: #C3521A;
+  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+}
+
+.btn-check:checked + .time-card .time-emoji,
+.btn-check:checked + .time-card .time-label {
+  filter: brightness(0) invert(1);
+}
+
+.time-emoji {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.time-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+/* Mood Grid */
 .mood-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
