@@ -57,8 +57,10 @@
   <!-- Journal Prompt Card -->
   <div class="journal-card mx-auto mb-4">
     <div class="journal-icon mb-3">💭</div>
-    <h3 class="journal-heading">Reflect on This</h3>
-    <p class="journal-text">{{ journal_prompt.prompt_text }}</p>
+    <h3 class="journal-heading">Journal Prompt of the Day</h3>
+
+    <!-- AI-Generated Prompt -->
+    <p class="journal-text">{{ practice.journal_prompt }}</p>
   </div>
 
   <!-- Action Buttons -->
@@ -67,7 +69,7 @@
        style="border-radius: 12px; padding: 12px 24px;">
       Back to Home
     </a>
-    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg"
+    <a href="{{ url_for('reflect') }}" class="btn btn-primary btn-lg"
        style="border-radius: 12px; padding: 12px 24px;">
       Continue to Journal
     </a>
@@ -175,7 +177,24 @@
   color: #495057;
   line-height: 1.7;
   font-style: italic;
-  margin: 0;
+  margin: 0 0 16px 0;
+}
+
+.journal-text:last-child {
+  margin-bottom: 0;
+}
+
+.journal-text.additional-question {
+  font-weight: 500;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f8e8df;
+}
+
+.journal-text.additional-question:first-of-type {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px solid #f8e8df;
 }
 
 /* Audio Player */

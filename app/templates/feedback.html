@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+{% block title %}Practice Feedback{% endblock %}
+
+{% block content %}
+<div class="feedback-container">
+  <div class="text-center mb-4">
+    <div class="feedback-icon mb-3">⭐</div>
+    <h1 class="display-5 mb-2" style="color: #C3521A; font-weight: 600;">
+      How Was Your Practice?
+    </h1>
+    <p class="text-muted">Your feedback helps us personalize your experience</p>
+  </div>
+
+  <!-- Practice Recap -->
+  <div class="practice-recap mx-auto mb-4">
+    <h3 class="recap-title">{{ practice.title }}</h3>
+    <span class="practice-type-badge">{{ practice.practice_type|capitalize }}</span>
+  </div>
+
+  <!-- Feedback Form -->
+  <form method="POST" action="{{ url_for('feedback') }}" class="mx-auto" style="max-width: 700px;">
+
+    <!-- Rating Question -->
+    <div class="feedback-section mb-5">
+      <label class="feedback-label">How did you feel after this practice?</label>
+      <div class="emoji-rating-grid">
+        <!-- Rating 1 - Very Unhelpful -->
+        <input type="radio" class="btn-check" name="rating" id="rating-1" value="1" required {% if existing_feedback and existing_feedback.rating == 1 %}checked{% endif %}>
+        <label class="emoji-card" for="rating-1">
+          <div class="emoji">😞</div>
+          <div class="emoji-label">Not Great</div>
+        </label>
+
+        <!-- Rating 2 - Unhelpful -->
+        <input type="radio" class="btn-check" name="rating" id="rating-2" value="2" required {% if existing_feedback and existing_feedback.rating == 2 %}checked{% endif %}>
+        <label class="emoji-card" for="rating-2">
+          <div class="emoji">😐</div>
+          <div class="emoji-label">Okay</div>
+        </label>
+
+        <!-- Rating 3 - Neutral -->
+        <input type="radio" class="btn-check" name="rating" id="rating-3" value="3" required {% if existing_feedback and existing_feedback.rating == 3 %}checked{% endif %}>
+        <label class="emoji-card" for="rating-3">
+          <div class="emoji">🙂</div>
+          <div class="emoji-label">Good</div>
+        </label>
+
+        <!-- Rating 4 - Helpful -->
+        <input type="radio" class="btn-check" name="rating" id="rating-4" value="4" required {% if existing_feedback and existing_feedback.rating == 4 %}checked{% endif %}>
+        <label class="emoji-card" for="rating-4">
+          <div class="emoji">😊</div>
+          <div class="emoji-label">Great</div>
+        </label>
+
+        <!-- Rating 5 - Very Helpful -->
+        <input type="radio" class="btn-check" name="rating" id="rating-5" value="5" required {% if existing_feedback and existing_feedback.rating == 5 %}checked{% endif %}>
+        <label class="emoji-card" for="rating-5">
+          <div class="emoji">🤩</div>
+          <div class="emoji-label">Amazing</div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Did This Help Question -->
+    <div class="feedback-section mb-4">
+      <label class="feedback-label">Did this practice help you feel more grounded?</label>
+      <div class="toggle-group">
+        <input type="radio" class="btn-check" name="helped" id="helped-yes" value="yes" {% if existing_feedback and existing_feedback.helped %}checked{% endif %}>
+        <label class="toggle-option" for="helped-yes">
+          ✓ Yes
+        </label>
+
+        <input type="radio" class="btn-check" name="helped" id="helped-no" value="no" {% if existing_feedback and existing_feedback.helped == False %}checked{% endif %}>
+        <label class="toggle-option" for="helped-no">
+          ✗ No
+        </label>
+      </div>
+    </div>
+
+    <!-- Pacing Question -->
+    <div class="feedback-section mb-5">
+      <label class="feedback-label">Was the pacing of the meditation right for you?</label>
+      <div class="pacing-group">
+        <input type="radio" class="btn-check" name="pacing" id="pacing-fast" value="Too fast" {% if existing_feedback and existing_feedback.pacing == 'Too fast' %}checked{% endif %}>
+        <label class="pacing-option" for="pacing-fast">
+          ⏩ Too Fast
+        </label>
+
+        <input type="radio" class="btn-check" name="pacing" id="pacing-right" value="Just right" {% if existing_feedback and existing_feedback.pacing == 'Just right' %}checked{% endif %}>
+        <label class="pacing-option" for="pacing-right">
+          ✓ Just Right
+        </label>
+
+        <input type="radio" class="btn-check" name="pacing" id="pacing-slow" value="Too slow" {% if existing_feedback and existing_feedback.pacing == 'Too slow' %}checked{% endif %}>
+        <label class="pacing-option" for="pacing-slow">
+          ⏪ Too Slow
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="button-group">
+      <a href="{{ url_for('reflect') }}" class="btn btn-secondary btn-lg">
+        Back to Journal
+      </a>
+      <button type="submit" class="btn btn-primary btn-lg">
+        Complete Session
+      </button>
+    </div>
+  </form>
+</div>
+
+<style>
+.feedback-container {
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.feedback-icon {
+  font-size: 4rem;
+  animation: rotate 4s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-15deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(15deg) scale(1.1);
+  }
+}
+
+/* Practice Recap */
+.practice-recap {
+  background: linear-gradient(135deg, #fff9f5 0%, #fff 100%);
+  border: 2px solid #f8e8df;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.recap-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #C3521A;
+  margin-bottom: 12px;
+}
+
+.practice-type-badge {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Feedback Sections */
+.feedback-section {
+  background: white;
+  border: 2px solid #f1f3f5;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.feedback-label {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Emoji Rating Grid */
+.emoji-rating-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.emoji-card {
+  background: white;
+  border: 3px solid #e9ecef;
+  border-radius: 16px;
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.emoji-card:hover {
+  transform: translateY(-4px);
+  border-color: #C3521A;
+  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.15);
+}
+
+.btn-check:checked + .emoji-card {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border-color: #C3521A;
+  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+}
+
+.btn-check:checked + .emoji-card .emoji,
+.btn-check:checked + .emoji-card .emoji-label {
+  filter: brightness(0) invert(1);
+}
+
+.emoji {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.emoji-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+/* Toggle Group (Yes/No) */
+.toggle-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.toggle-option {
+  background: white;
+  border: 3px solid #e9ecef;
+  border-radius: 12px;
+  padding: 16px 24px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.toggle-option:hover {
+  border-color: #C3521A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.15);
+}
+
+.btn-check:checked + .toggle-option {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border-color: #C3521A;
+  color: white;
+  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.3);
+}
+
+/* Pacing Group */
+.pacing-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.pacing-option {
+  background: white;
+  border: 3px solid #e9ecef;
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.pacing-option:hover {
+  border-color: #C3521A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.15);
+}
+
+.btn-check:checked + .pacing-option {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border-color: #C3521A;
+  color: white;
+  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.3);
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.btn-secondary {
+  background: #e9ecef;
+  color: #495057;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #dee2e6;
+  color: #343a40;
+  border-color: #adb5bd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .emoji-rating-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pacing-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .feedback-container {
+    padding: 40px 16px;
+  }
+
+  .emoji-rating-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .emoji {
+    font-size: 2rem;
+  }
+
+  .toggle-group {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn-lg {
+    width: 100%;
+  }
+}
+</style>
+{% endblock %}
