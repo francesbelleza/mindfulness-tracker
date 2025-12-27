@@ -7,8 +7,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    password_hash = db.Column(db.String(256), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
     # Relationship to CheckIn
     checkins = db.relationship('CheckIn', backref='user', lazy=True)
@@ -27,7 +27,7 @@ class CheckIn(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     mood = db.Column(db.String(20), nullable=False)  # Happy, Calm, Anxious, Sad
     body_feeling = db.Column(db.String(200), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
     # Relationships to AI-generated content
     practice = db.relationship('Practice', backref='checkin', lazy=True, uselist=False)
@@ -46,7 +46,8 @@ class Practice(db.Model):
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     practice_type = db.Column(db.String(50), nullable=False)  # breathing, meditation, movement, grounding
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    audio_file = db.Column(db.String(255), nullable=True)  # OpenAI TTS audio filename
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):
         return f'<Practice {self.title} for CheckIn {self.checkin_id}>'
@@ -59,7 +60,7 @@ class JournalPrompt(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     checkin_id = db.Column(db.Integer, db.ForeignKey('user_checkins.id'), nullable=False)
     prompt_text = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):
         return f'<JournalPrompt for CheckIn {self.checkin_id}>'

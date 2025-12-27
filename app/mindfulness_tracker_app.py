@@ -7,7 +7,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime, date
 from app.models import User, CheckIn, Practice, JournalPrompt
 from app import db
-from app.ai_service import generate_practice_and_prompt, get_fallback_content
+from app.ai_service import generate_practice_and_prompt, get_fallback_content, generate_audio
 
 def initial_routes(app):
     @app.route('/signup', methods=['GET', 'POST'])
@@ -138,6 +138,16 @@ def initial_routes(app):
         db.session.add(prompt_obj)
 
         db.session.commit()
+
+        # Generate natural AI audio for the practice (mood-specific voice)
+        audio_filename = generate_audio(
+            ai_result['practice']['description'],
+            practice_obj.id,
+            latest_checkin.mood  # Pass mood to select appropriate voice
+        )
+        if audio_filename:
+            practice_obj.audio_file = audio_filename
+            db.session.commit()
 
         return render_template('practice.html',
                                practice=practice_obj,

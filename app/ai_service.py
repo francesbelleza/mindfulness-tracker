@@ -1,6 +1,9 @@
 import os
 import json
+from pathlib import Path
 from openai import OpenAI
+from elevenlabs.client import ElevenLabs
+from elevenlabs import save
 
 def generate_practice_and_prompt(mood, body_feeling=None):
     """
@@ -29,27 +32,42 @@ def generate_practice_and_prompt(mood, body_feeling=None):
         user_message += f"\nBody feeling: {body_feeling}"
 
     # System prompt for the AI
-    system_prompt = """You are a compassionate mindful wellness coach. Based on the user's mood and body sensations, suggest:
-1. A short mindfulness practice (2-3 minutes) that is specific and actionable
+    system_prompt = """You are a compassionate mindfulness meditation teacher. Based on the user's mood and body sensations, create:
+1. A guided mindfulness practice (2-4 minutes) with clear, spoken-style instructions
 2. A thoughtful journal prompt for reflection
+
+IMPORTANT: Write the practice description as if you're speaking directly to the user in a calm, guiding voice. Use "you" language and present tense. Make it sound like guided meditation audio that will be read aloud with natural pauses.
+
+CRITICAL PAUSE INSTRUCTIONS - VERY IMPORTANT:
+- Use THREE ellipses (...) for long 3-5 second meditative pauses for breathing (e.g., "Close your eyes... ... ... Take a deep breath")
+- Use TWO ellipses (... ...) for medium 2-3 second pauses (e.g., "Notice your breath... ... Feel the rise and fall")
+- Use ONE ellipsis (...) for brief 1-2 second pauses (e.g., "Breathe in... and breathe out")
+- Use commas ONLY within the same sentence, not for pauses between instructions
+- Add MANY pauses - meditation should feel spacious, not rushed
+- Example: "Find a comfortable position... ... ... When you're ready... ... gently close your eyes... ... ... Take a deep, slow breath in... ... ... and exhale fully... ... ... Notice the sensation of your breath... ... ... Continue breathing naturally... ... ..."
 
 Respond ONLY with valid JSON in this exact format:
 {
   "practice": {
     "title": "Practice name (concise, under 50 characters)",
-    "description": "Step-by-step instructions (clear, numbered steps if applicable, 100-200 words)",
+    "description": "Voice-guided instructions with natural pauses using ellipses and punctuation (150-250 words, very slow meditative pacing)",
     "type": "breathing|meditation|movement|grounding"
   },
   "journal_prompt": "A thoughtful question or reflection prompt (1-2 sentences)"
 }
 
 Guidelines:
-- For anxious/stressed moods: Focus on grounding, breathing exercises, calming techniques
-- For sad/low moods: Focus on compassion, gentle movement, self-kindness
-- For happy/content moods: Focus on gratitude, energizing practices, appreciation
-- For calm moods: Focus on body awareness, mindfulness, meditation
-- Keep practices simple and accessible (no equipment needed)
-- Make journal prompts introspective but not overwhelming"""
+- ALWAYS incorporate their body feelings into the practice if provided
+- Use calm, soothing language with strategic pauses throughout
+- Example: "Gently close your eyes... Notice the sensation of..." NOT "1. Close eyes 2. Notice..."
+- For anxious moods + tense body: Focus on releasing tension, progressive relaxation with longer pauses
+- For sad moods + heavy/tired body: Focus on gentle compassion, soft breathing with nurturing pauses
+- For happy moods: Enhance and savor positive sensations with appreciative pauses
+- For calm moods: Deepen present-moment awareness with spacious pauses
+- Practices should be STRICTLY mindfulness-based (breathing, body scans, awareness, meditation)
+- NO exercise, yoga poses, or physical activities - only gentle awareness practices
+- Keep it simple and accessible (seated or lying down)
+- Use ellipses generously to create meditative breathing space"""
 
     try:
         # Call OpenAI API
@@ -142,15 +160,15 @@ def get_fallback_content(mood):
         'Happy': {
             'practice': {
                 'title': 'Gratitude Breathing',
-                'description': '1. Find a comfortable seated position.\n2. Take a deep breath in, thinking of one thing you\'re grateful for.\n3. As you exhale, let a smile naturally form.\n4. Repeat for 5-7 breaths, bringing to mind different things you appreciate.\n5. Notice the warmth of gratitude in your body.',
+                'description': 'Find a comfortable place to sit... When you\'re ready, gently close your eyes... Take a deep breath in through your nose... and as you do, bring to mind one thing you\'re grateful for today... As you exhale slowly, let a gentle smile form on your face... Feel the warmth of gratitude spreading through your chest... Take another breath in... thinking of something else you appreciate... With each exhale, notice how gratitude feels in your body... Continue this for five to seven breaths... savoring each moment of appreciation... When you\'re ready... slowly open your eyes... carrying this gratitude with you.',
                 'type': 'breathing'
             },
-            'journal_prompt': 'What brought you joy today, and how did it feel in your body?'
+            'journal_prompt': 'What brought you joy today, and where did you feel it in your body?'
         },
         'Calm': {
             'practice': {
                 'title': 'Body Scan Meditation',
-                'description': '1. Sit or lie down comfortably.\n2. Close your eyes and take three deep breaths.\n3. Bring your attention to your feet, noticing any sensations.\n4. Slowly move your awareness up through your legs, torso, arms, and head.\n5. Spend 10-15 seconds on each area, simply observing without judgment.\n6. End by taking three more deep breaths.',
+                'description': 'Settle into a comfortable position... either sitting or lying down... Gently close your eyes... and take three slow, deep breaths... Now, bring your awareness to your feet... Notice any sensations there... warmth, coolness, tingling... or perhaps nothing at all... There\'s no right or wrong... Slowly move your attention up to your ankles... then your calves... Take your time with each area... Continue scanning upward through your legs... your hips... your abdomen... Notice your chest rising and falling with each breath... Bring awareness to your shoulders... your arms... your hands... Finally, notice sensations in your neck... your face... the top of your head... Take three more deep breaths... feeling your whole body present and relaxed.',
                 'type': 'meditation'
             },
             'journal_prompt': 'What does peace feel like in your body right now?'
@@ -158,15 +176,15 @@ def get_fallback_content(mood):
         'Anxious': {
             'practice': {
                 'title': '4-7-8 Calming Breath',
-                'description': '1. Sit comfortably with your back straight.\n2. Exhale completely through your mouth.\n3. Inhale through your nose for 4 counts.\n4. Hold your breath for 7 counts.\n5. Exhale through your mouth for 8 counts.\n6. Repeat this cycle 3-4 times.\n7. Return to normal breathing and notice how you feel.',
+                'description': 'Find a comfortable seated position... and rest your hands gently in your lap... Let\'s begin by exhaling completely through your mouth... making a soft whoosh sound... Now, close your mouth... and inhale quietly through your nose for a count of four... one, two, three, four... Hold your breath gently for seven counts... one, two, three, four, five, six, seven... Now exhale completely through your mouth for eight counts... one, two, three, four, five, six, seven, eight... This completes one cycle... Continue this rhythm for three more cycles... allowing each breath to calm your nervous system... Notice how your body begins to relax with each exhale... When you\'re done... return to your natural breathing... and notice how you feel.',
                 'type': 'breathing'
             },
             'journal_prompt': 'What do you need to feel safe and grounded right now?'
         },
         'Sad': {
             'practice': {
-                'title': 'Self-Compassion Hand on Heart',
-                'description': '1. Place one or both hands over your heart.\n2. Feel the warmth and gentle pressure of your hands.\n3. Take slow, deep breaths.\n4. Silently say: "May I be kind to myself. May I accept myself as I am."\n5. Continue for 2-3 minutes, breathing gently.\n6. Notice any shift in how you feel.',
+                'title': 'Self-Compassion Practice',
+                'description': 'Gently place one or both hands over your heart... Feel the warmth and gentle pressure of your hands resting there... Take a slow, deep breath in... and as you exhale, let your shoulders soften... With each breath... notice the rise and fall of your chest beneath your hands... Silently, with kindness, say to yourself... "May I be kind to myself in this moment... May I accept myself just as I am..."... Continue breathing slowly... feeling your hands over your heart... If it feels right... you might say... "May I give myself the compassion I need..."... Stay here for a few minutes... breathing gently... holding yourself with care... Notice any shifts, however subtle, in how you feel... You are worthy of this kindness.',
                 'type': 'meditation'
             },
             'journal_prompt': 'What would you say to comfort a dear friend who felt this way?'
@@ -175,3 +193,62 @@ def get_fallback_content(mood):
 
     # Return mood-specific fallback, or default to Calm if mood not found
     return fallback_map.get(mood, fallback_map['Calm'])
+
+
+def generate_audio(practice_text, practice_id, mood):
+    """
+    Generate natural-sounding audio for a practice using ElevenLabs TTS.
+    Uses a single calm, meditative voice for all moods.
+
+    Args:
+        practice_text (str): The practice description text
+        practice_id (int): The practice ID for filename
+        mood (str): User's mood (not used for voice selection, kept for compatibility)
+
+    Returns:
+        str: Filename of the generated audio, or None if failed
+    """
+    api_key = os.getenv('ELEVENLABS_API_KEY')
+    if not api_key:
+        print("ERROR: ELEVENLABS_API_KEY not found")
+        return None
+
+    # Use single meditative voice for all moods
+    # Lily: Velvety Actress - calm, soothing, perfect for meditation
+    voice_id = 'pFZP5JQG7iQjIQuC4Bku'  # Lily
+    voice_name = 'Lily'
+
+    try:
+        # Create audio directory if it doesn't exist
+        audio_dir = Path("app/static/audio")
+        audio_dir.mkdir(parents=True, exist_ok=True)
+
+        # Generate audio filename
+        audio_filename = f"practice_{practice_id}.mp3"
+        audio_path = audio_dir / audio_filename
+
+        # Initialize ElevenLabs client
+        client = ElevenLabs(api_key=api_key)
+
+        # Generate audio with ElevenLabs TTS (returns a generator)
+        # Using higher stability, lower similarity, and slower speed for meditative voice
+        audio_generator = client.text_to_speech.convert(
+            voice_id=voice_id,
+            text=practice_text,
+            model_id="eleven_multilingual_v2",  # High-quality model with natural prosody
+            voice_settings={
+                "stability": 0.75,  # Higher stability = more consistent, calmer delivery
+                "similarity_boost": 0.5,  # Lower boost = softer, less harsh voice
+                "speed": 0.85  # Slower speed for more meditative pacing
+            }
+        )
+
+        # Save the audio file (save() handles the generator)
+        save(audio_generator, str(audio_path))
+
+        print(f"✓ Audio generated: {audio_filename} (Voice: {voice_name} - calm meditative voice)")
+        return audio_filename
+
+    except Exception as e:
+        print(f"ERROR: Failed to generate audio with ElevenLabs: {e}")
+        return None
