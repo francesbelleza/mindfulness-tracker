@@ -4,11 +4,10 @@
 {% block content %}
 <div class="feedback-container">
   <div class="text-center mb-4">
-    <div class="feedback-icon mb-3">⭐</div>
-    <h1 class="display-5 mb-2" style="color: #C3521A; font-weight: 600;">
+    <h1 class="display-5 mb-2">
       How Was Your Practice?
     </h1>
-    <p class="text-muted">Your feedback helps us personalize your experience</p>
+    <p class="subtitle">Your feedback helps us personalize your experience</p>
   </div>
 
   <!-- Practice Recap -->
@@ -18,41 +17,41 @@
   </div>
 
   <!-- Feedback Form -->
-  <form method="POST" action="{{ url_for('feedback') }}" class="mx-auto" style="max-width: 700px;">
+  <form method="POST" action="{{ url_for('feedback') }}" class="mx-auto" style="max-width: 850px;">
 
     <!-- Rating Question -->
     <div class="feedback-section mb-5">
       <label class="feedback-label">How did you feel after this practice?</label>
       <div class="emoji-rating-grid">
-        <!-- Rating 1 - Very Unhelpful -->
+        <!-- Rating 1 -->
         <input type="radio" class="btn-check" name="rating" id="rating-1" value="1" required {% if existing_feedback and existing_feedback.rating == 1 %}checked{% endif %}>
         <label class="emoji-card" for="rating-1">
           <div class="emoji">😞</div>
           <div class="emoji-label">Not Great</div>
         </label>
 
-        <!-- Rating 2 - Unhelpful -->
+        <!-- Rating 2 -->
         <input type="radio" class="btn-check" name="rating" id="rating-2" value="2" required {% if existing_feedback and existing_feedback.rating == 2 %}checked{% endif %}>
         <label class="emoji-card" for="rating-2">
           <div class="emoji">😐</div>
           <div class="emoji-label">Okay</div>
         </label>
 
-        <!-- Rating 3 - Neutral -->
+        <!-- Rating 3 -->
         <input type="radio" class="btn-check" name="rating" id="rating-3" value="3" required {% if existing_feedback and existing_feedback.rating == 3 %}checked{% endif %}>
         <label class="emoji-card" for="rating-3">
           <div class="emoji">🙂</div>
           <div class="emoji-label">Good</div>
         </label>
 
-        <!-- Rating 4 - Helpful -->
+        <!-- Rating 4 -->
         <input type="radio" class="btn-check" name="rating" id="rating-4" value="4" required {% if existing_feedback and existing_feedback.rating == 4 %}checked{% endif %}>
         <label class="emoji-card" for="rating-4">
           <div class="emoji">😊</div>
           <div class="emoji-label">Great</div>
         </label>
 
-        <!-- Rating 5 - Very Helpful -->
+        <!-- Rating 5 -->
         <input type="radio" class="btn-check" name="rating" id="rating-5" value="5" required {% if existing_feedback and existing_feedback.rating == 5 %}checked{% endif %}>
         <label class="emoji-card" for="rating-5">
           <div class="emoji">🤩</div>
@@ -118,44 +117,40 @@
   min-height: 70vh;
 }
 
-.feedback-icon {
-  font-size: 4rem;
-  animation: rotate 4s ease-in-out infinite;
+.feedback-container h1 {
+  color: var(--text-light);
+  font-weight: 300;
 }
 
-@keyframes rotate {
-  0%, 100% {
-    transform: rotate(0deg) scale(1);
-  }
-  25% {
-    transform: rotate(-15deg) scale(1.1);
-  }
-  75% {
-    transform: rotate(15deg) scale(1.1);
-  }
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
 }
 
 /* Practice Recap */
 .practice-recap {
-  background: linear-gradient(135deg, #fff9f5 0%, #fff 100%);
-  border: 2px solid #f8e8df;
-  border-radius: 16px;
-  padding: 24px;
+  background: rgba(165, 99, 54, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
   text-align: center;
   max-width: 600px;
-  margin-bottom: 32px;
+  margin-bottom: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .recap-title {
   font-size: 1.5rem;
-  font-weight: 600;
-  color: #C3521A;
-  margin-bottom: 12px;
+  font-weight: 300;
+  color: var(--text-light);
+  margin-bottom: var(--space-md);
 }
 
 .practice-type-badge {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  color: var(--bg-primary);
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -166,177 +161,159 @@
 
 /* Feedback Sections */
 .feedback-section {
-  background: white;
-  border: 2px solid #f1f3f5;
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background: rgba(165, 99, 54, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .feedback-label {
   display: block;
   font-size: 1.15rem;
-  font-weight: 600;
-  color: #495057;
-  margin-bottom: 20px;
+  font-weight: 300;
+  color: var(--text-light);
+  margin-bottom: var(--space-lg);
   text-align: center;
+  letter-spacing: 0.5px;
 }
 
 /* Emoji Rating Grid */
 .emoji-rating-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+  gap: var(--space-sm);
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .emoji-card {
-  background: white;
-  border: 3px solid #e9ecef;
-  border-radius: 16px;
-  padding: 20px 12px;
+  background: rgba(38, 60, 65, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-soft);
 }
 
 .emoji-card:hover {
-  transform: translateY(-4px);
-  border-color: #C3521A;
-  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.15);
+  transform: translateY(-3px);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .btn-check:checked + .emoji-card {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border-color: #C3521A;
-  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--glow-medium);
 }
 
-.btn-check:checked + .emoji-card .emoji,
 .btn-check:checked + .emoji-card .emoji-label {
-  filter: brightness(0) invert(1);
+  color: var(--bg-primary);
 }
 
 .emoji {
   font-size: 2.5rem;
-  margin-bottom: 8px;
-  transition: all 0.3s ease;
+  margin-bottom: var(--space-xs);
+  transition: var(--transition-smooth);
 }
 
 .emoji-label {
   font-size: 0.85rem;
-  font-weight: 500;
-  color: #6c757d;
-  transition: all 0.3s ease;
+  font-weight: 300;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
 }
 
 /* Toggle Group (Yes/No) */
 .toggle-group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: var(--space-md);
   max-width: 400px;
   margin: 0 auto;
 }
 
 .toggle-option {
-  background: white;
-  border: 3px solid #e9ecef;
-  border-radius: 12px;
-  padding: 16px 24px;
+  background: rgba(38, 60, 65, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
   text-align: center;
   cursor: pointer;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: #495057;
-  transition: all 0.3s ease;
+  font-weight: 300;
+  color: var(--text-light);
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-soft);
 }
 
 .toggle-option:hover {
-  border-color: #C3521A;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.15);
+  border-color: var(--sunset-peach);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .btn-check:checked + .toggle-option {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border-color: #C3521A;
-  color: white;
-  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.3);
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  border-color: var(--sunset-peach);
+  color: var(--bg-primary);
+  box-shadow: var(--glow-medium);
 }
 
 /* Pacing Group */
 .pacing-group {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: var(--space-md);
   max-width: 550px;
   margin: 0 auto;
 }
 
 .pacing-option {
-  background: white;
-  border: 3px solid #e9ecef;
-  border-radius: 12px;
-  padding: 16px 12px;
+  background: rgba(38, 60, 65, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
   text-align: center;
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 600;
-  color: #495057;
-  transition: all 0.3s ease;
+  font-weight: 300;
+  color: var(--text-light);
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-soft);
 }
 
 .pacing-option:hover {
-  border-color: #C3521A;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.15);
+  border-color: var(--sunset-peach);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .btn-check:checked + .pacing-option {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border-color: #C3521A;
-  color: white;
-  box-shadow: 0 4px 12px rgba(195, 82, 26, 0.3);
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  border-color: var(--sunset-peach);
+  color: var(--bg-primary);
+  box-shadow: var(--glow-medium);
 }
 
 /* Button Group */
 .button-group {
   display: flex;
-  gap: 12px;
+  gap: var(--space-md);
   justify-content: center;
-  margin-top: 32px;
-}
-
-.btn-secondary {
-  background: #e9ecef;
-  color: #495057;
-  border: 2px solid #dee2e6;
-  border-radius: 12px;
-  padding: 14px 28px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background: #dee2e6;
-  color: #343a40;
-  border-color: #adb5bd;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 14px 28px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+  margin-top: var(--space-2xl);
 }
 
 /* Responsive */

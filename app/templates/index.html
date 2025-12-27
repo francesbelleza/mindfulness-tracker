@@ -4,178 +4,118 @@
 {% block content %}
 <div class="landing-container">
   <div class="hero-section text-center">
-    <div class="mindfulness-icon mb-4">🌿</div>
-
-    <h1 class="display-3 mb-4" style="color: #C3521A; font-weight: 700; letter-spacing: -0.5px;">
+    <h1 class="display-3 mb-4">
       welcome to recalibrate
     </h1>
 
-    <p class="lead mb-5" style="font-size: 1.3rem; color: #6c757d; max-width: 600px; margin: 0 auto;">
+    <p class="lead mb-5">
       Take a moment to pause, breathe, and check in with yourself.
     </p>
 
     {% if current_user.is_authenticated %}
       <div class="cta-buttons">
-        <a href="{{ url_for('check_in') }}" class="btn btn-primary btn-lg shadow-lg"
-           style="border-radius: 12px; padding: 16px 48px; font-size: 1.1rem;">
-          Start Daily Check-In
+        <a href="{{ url_for('check_in') }}" class="btn btn-primary btn-lg">
+          Start Check-In
         </a>
       </div>
 
-      <div class="welcome-back mt-4">
-        <p style="color: #6c757d; font-size: 0.95rem;">
-          Welcome back, <strong style="color: #C3521A;">{{ current_user.username }}</strong> 👋
+      <div class="welcome-back mt-5">
+        <p>
+          Welcome back, <strong>{{ current_user.username }}</strong>
         </p>
       </div>
     {% else %}
       <div class="cta-buttons">
-        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg shadow-lg me-3"
-           style="border-radius: 12px; padding: 16px 48px; font-size: 1.1rem;">
+        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg me-3">
           Get Started
         </a>
-        <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg"
-           style="border-radius: 12px; padding: 16px 48px; font-size: 1.1rem;">
+        <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
           Log In
         </a>
       </div>
     {% endif %}
   </div>
-
-  <!-- Features Section -->
-  <div class="features-section mt-5 pt-5">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h5>Daily Check-Ins</h5>
-          <p>Track your mood and physical wellbeing every day</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">🧘</div>
-          <h5>Mindful Practices</h5>
-          <p>Get personalized mindfulness exercises</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h5>Track Progress</h5>
-          <p>Visualize your mindfulness journey over time</p>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <style>
 .landing-container {
-  padding: 60px 20px;
-  max-width: 1200px;
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 900px;
   margin: 0 auto;
-  min-height: 75vh;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-section {
-  padding: 40px 0;
+  width: 100%;
+  text-align: center;
 }
 
-.mindfulness-icon {
-  font-size: 5rem;
-  animation: sway 4s ease-in-out infinite;
+.hero-section h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  font-size: 3.5rem;
+  letter-spacing: 3px;
+  margin-bottom: var(--space-xl);
+  text-shadow: var(--glow-subtle);
 }
 
-@keyframes sway {
-  0%, 100% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
+.hero-section .lead {
+  font-size: 1.3rem;
+  color: var(--text-medium);
+  max-width: 650px;
+  margin: 0 auto var(--space-2xl) auto;
+  line-height: 2;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
 .cta-buttons {
   display: flex;
-  gap: 16px;
+  gap: var(--space-lg);
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: var(--space-xl);
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border: none;
-  transition: all 0.3s ease;
+.cta-buttons .btn {
+  font-size: 1rem;
+  padding: 16px 48px;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(195, 82, 26, 0.3) !important;
+.welcome-back p {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
-.btn-outline-primary {
-  border: 2px solid #C3521A;
-  color: #C3521A;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover {
-  background: #C3521A;
-  border-color: #C3521A;
-  color: white;
-  transform: translateY(-2px);
-}
-
-.features-section {
-  padding-top: 60px;
-  border-top: 1px solid #e9ecef;
-}
-
-.feature-card {
-  background: white;
-  border: 2px solid #f1f3f5;
-  border-radius: 16px;
-  padding: 32px 24px;
-  text-align: center;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-.feature-card:hover {
-  border-color: #C3521A;
-  box-shadow: 0 8px 24px rgba(195, 82, 26, 0.1);
-  transform: translateY(-4px);
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-}
-
-.feature-card h5 {
-  color: #212529;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.feature-card p {
-  color: #6c757d;
-  font-size: 0.95rem;
-  margin-bottom: 0;
+.welcome-back strong {
+  color: var(--text-accent);
+  font-weight: 300;
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
   .landing-container {
-    padding: 40px 20px;
+    padding: var(--space-xl) var(--space-md);
   }
 
-  .mindfulness-icon {
-    font-size: 4rem;
+  .hero-section h1 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  .hero-section .lead {
+    font-size: 1.15rem;
   }
 
   .cta-buttons {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--space-md);
   }
 
   .cta-buttons .btn {

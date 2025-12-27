@@ -5,9 +5,8 @@
 <div class="auth-container">
   <div class="auth-card mx-auto">
     <div class="text-center mb-4">
-      <div class="auth-icon mb-3">🔐</div>
-      <h2 class="mb-2" style="color: #C3521A; font-weight: 600;">Welcome Back</h2>
-      <p class="text-muted">Log in to continue your mindfulness journey</p>
+      <h2 class="mb-2">Welcome Back</h2>
+      <p class="subtitle">Log in to continue your mindfulness journey</p>
     </div>
 
     <form method="POST" action="{{ url_for('login') }}">
@@ -44,7 +43,7 @@
 
 <style>
 .auth-container {
-  padding: 60px 20px;
+  padding: 80px 20px;
   max-width: 480px;
   margin: 0 auto;
   min-height: 70vh;
@@ -53,50 +52,63 @@
 }
 
 .auth-card {
-  background: white;
-  border: 2px solid #f1f3f5;
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  background: rgba(165, 99, 54, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
   width: 100%;
 }
 
-.auth-icon {
-  font-size: 3rem;
+.auth-card h2 {
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.form-label {
+  font-weight: 300;
+  color: var(--text-light);
 }
 
 .custom-input {
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  color: var(--text-light);
+  transition: var(--transition-smooth);
 }
 
 .custom-input:focus {
-  border-color: #C3521A;
-  box-shadow: 0 0 0 0.2rem rgba(195, 82, 26, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--sunset-peach);
+  box-shadow: 0 0 0 3px rgba(232, 168, 124, 0.1);
+  outline: none;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
+.custom-input::placeholder {
+  color: var(--text-subtle);
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+.text-muted {
+  color: var(--text-subtle) !important;
 }
 
 @media (max-width: 576px) {
   .auth-container {
-    padding: 40px 20px;
+    padding: 60px 20px;
   }
 
   .auth-card {
-    padding: 32px 24px;
+    padding: var(--space-xl);
   }
 }
 </style>

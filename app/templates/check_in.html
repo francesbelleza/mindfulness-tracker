@@ -4,15 +4,15 @@
 {% block content %}
 <div class="check-in-container">
   <div class="text-center mb-5">
-    <h1 class="display-5 mb-3" style="color: #C3521A; font-weight: 600;">How are you feeling today?</h1>
-    <p class="text-muted">Take a moment to check in with yourself</p>
+    <h1 class="display-5 mb-3">How are you feeling today?</h1>
+    <p class="subtitle">Take a moment to check in with yourself</p>
   </div>
 
   <form method="POST" action="{{ url_for('check_in') }}" class="mx-auto" style="max-width: 600px;">
 
     <!-- Time of Day Selection -->
     <div class="mb-5">
-      <label class="form-label d-block text-center mb-4" style="font-size: 1.1rem; font-weight: 500;">
+      <label class="form-label d-block text-center mb-4">
         When are you checking in?
       </label>
 
@@ -20,14 +20,12 @@
         <!-- Morning -->
         <input type="radio" class="btn-check" name="time_of_day" id="time-morning" value="Morning" required>
         <label class="time-card" for="time-morning">
-          <div class="time-emoji">☀️</div>
           <div class="time-label">Morning</div>
         </label>
 
         <!-- Night -->
         <input type="radio" class="btn-check" name="time_of_day" id="time-night" value="Night" required>
         <label class="time-card" for="time-night">
-          <div class="time-emoji">🌙</div>
           <div class="time-label">Night</div>
         </label>
       </div>
@@ -35,7 +33,7 @@
 
     <!-- Mood Selection -->
     <div class="mb-5">
-      <label class="form-label d-block text-center mb-4" style="font-size: 1.1rem; font-weight: 500;">
+      <label class="form-label d-block text-center mb-4">
         Select your mood
       </label>
 
@@ -43,28 +41,28 @@
         <!-- Happy -->
         <input type="radio" class="btn-check" name="mood" id="mood-happy" value="Happy" required>
         <label class="mood-card" for="mood-happy">
-          <div class="mood-emoji">😊</div>
+          <div class="mood-indicator mood-happy"></div>
           <div class="mood-label">Happy</div>
         </label>
 
         <!-- Calm -->
         <input type="radio" class="btn-check" name="mood" id="mood-calm" value="Calm" required>
         <label class="mood-card" for="mood-calm">
-          <div class="mood-emoji">😌</div>
+          <div class="mood-indicator mood-calm"></div>
           <div class="mood-label">Calm</div>
         </label>
 
         <!-- Anxious -->
         <input type="radio" class="btn-check" name="mood" id="mood-anxious" value="Anxious" required>
         <label class="mood-card" for="mood-anxious">
-          <div class="mood-emoji">😰</div>
+          <div class="mood-indicator mood-anxious"></div>
           <div class="mood-label">Anxious</div>
         </label>
 
         <!-- Sad -->
         <input type="radio" class="btn-check" name="mood" id="mood-sad" value="Sad" required>
         <label class="mood-card" for="mood-sad">
-          <div class="mood-emoji">😔</div>
+          <div class="mood-indicator mood-sad"></div>
           <div class="mood-label">Sad</div>
         </label>
       </div>
@@ -95,128 +93,200 @@
 
 <style>
 .check-in-container {
-  padding: 40px 20px;
+  padding: var(--space-2xl) var(--space-lg);
   max-width: 800px;
   margin: 0 auto;
 }
 
-/* Time of Day Grid */
+.check-in-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.form-label {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-medium);
+  letter-spacing: 0.5px;
+}
+
+/* Time of Day Grid - Dark glassmorphic cards */
 .time-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  max-width: 400px;
+  gap: var(--space-lg);
+  max-width: 450px;
   margin: 0 auto;
 }
 
 .time-card {
-  background: white;
-  border: 3px solid #e9ecef;
-  border-radius: 16px;
-  padding: 24px 16px;
+  background: rgba(38, 60, 65, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-soft);
 }
 
 .time-card:hover {
-  transform: translateY(-4px);
-  border-color: #C3521A;
-  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.15);
+  transform: translateY(-3px);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .btn-check:checked + .time-card {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border-color: #C3521A;
-  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--glow-medium);
 }
 
-.btn-check:checked + .time-card .time-emoji,
 .btn-check:checked + .time-card .time-label {
-  filter: brightness(0) invert(1);
-}
-
-.time-emoji {
-  font-size: 3rem;
-  margin-bottom: 8px;
-  transition: all 0.3s ease;
+  color: var(--bg-primary);
 }
 
 .time-label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #495057;
-  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  transition: var(--transition-smooth);
 }
 
-/* Mood Grid */
+/* Mood Grid - Dark cards with colored indicators */
 .mood-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 20px;
-  max-width: 600px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+  max-width: 700px;
   margin: 0 auto;
 }
 
 .mood-card {
-  background: white;
-  border: 3px solid #e9ecef;
-  border-radius: 16px;
-  padding: 24px 16px;
+  background: rgba(38, 60, 65, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .mood-card:hover {
-  transform: translateY(-4px);
-  border-color: #C3521A;
-  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.15);
+  transform: translateY(-3px);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
 }
 
 .btn-check:checked + .mood-card {
-  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
-  border-color: #C3521A;
-  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--glow-medium);
 }
 
-.btn-check:checked + .mood-card .mood-emoji,
 .btn-check:checked + .mood-card .mood-label {
-  filter: brightness(0) invert(1);
+  color: var(--bg-primary);
 }
 
-.mood-emoji {
-  font-size: 3rem;
-  margin-bottom: 8px;
-  transition: all 0.3s ease;
+.btn-check:checked + .mood-card .mood-indicator {
+  background: white;
+  border-color: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Mood Indicators - Circular colored dots with soft glow */
+.mood-indicator {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  border: 3px solid;
+  transition: var(--transition-smooth);
+  box-shadow: 0 0 15px currentColor;
+}
+
+.mood-happy {
+  background: #f4d03f;
+  border-color: #f4d03f;
+}
+
+.mood-calm {
+  background: #85c1e2;
+  border-color: #85c1e2;
+}
+
+.mood-anxious {
+  background: #e17055;
+  border-color: #e17055;
+}
+
+.mood-sad {
+  background: #74b9ff;
+  border-color: #74b9ff;
 }
 
 .mood-label {
   font-size: 1rem;
-  font-weight: 500;
-  color: #495057;
-  transition: all 0.3s ease;
+  font-weight: 300;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
+}
+
+.form-control {
+  background: rgba(38, 60, 65, 0.3);
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  color: var(--text-light);
+  font-weight: 300;
+  transition: var(--transition-smooth);
 }
 
 .form-control:focus {
-  border-color: #C3521A;
-  box-shadow: 0 0 0 0.2rem rgba(195, 82, 26, 0.15);
+  background: rgba(38, 60, 65, 0.5);
+  border-color: var(--sunset-peach);
+  box-shadow: 0 0 0 3px rgba(232, 168, 124, 0.1);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--text-subtle);
+}
+
+.btn-primary {
+  padding: 16px 48px;
+  font-size: 1rem;
 }
 
 @media (max-width: 576px) {
   .mood-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .mood-emoji {
-    font-size: 2.5rem;
+    gap: var(--space-md);
   }
 
   .check-in-container {
-    padding: 20px 10px;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .mood-indicator {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>
