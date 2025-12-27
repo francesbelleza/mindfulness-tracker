@@ -1,10 +1,10 @@
 # planning
 
-## 📊 Current Progress: Sprint 2 Complete! 🎉
+## 📊 Current Progress: Sprint 3 Complete! 🎉
 
-**Completed:** Sprint 0, Sprint 1, Sprint 2
-**Next Up:** Sprint 3 - AI Integration
-**Overall MVP Progress:** ~40% complete
+**Completed:** Sprint 0, Sprint 1, Sprint 2, Sprint 3
+**Next Up:** Sprint 4 - Journal & Feedback System
+**Overall MVP Progress:** ~60% complete
 
 ---
 
@@ -26,11 +26,11 @@ and intentional flow.
 [✅] **1x Daily Mood Check-In**
   - Users can check in once per day with a mood emoji and an optional body feeling. Repeat check-ins are gently blocked until the next day.
 
-[⏳] **AI-Powered Practice Suggestions (via Wrapper)** ← NEXT (Sprint 3)
-  - After checking in, the app uses an AI wrapper (like OpenAI or Claude) to suggest one mindfulness practice and one journal prompt based on the user's mood and internal research mappings.
+[✅] **AI-Powered Practice Suggestions (via Wrapper)**
+  - After checking in, the app uses OpenAI API to suggest one mindfulness practice and one journal prompt based on the user's mood and body feelings. Includes fallback content if API fails.
 
-[⏳] **Practice Display Page** ← Sprint 3
-  - The selected mindfulness practice is shown on a dedicated page with a written description and (optionally) an image, audio, or video link to guide the user through the practice.
+[✅] **Practice Display Page**
+  - The AI-generated mindfulness practice is shown on a beautifully designed page with title, description, practice type badge, and journal prompt. Includes "Continue to Journal" button.
 
 [] **Journal Reflection Page** ← Sprint 4
   - Users are given a journal prompt and can respond in a text box. Their reflections are saved securely.
@@ -45,7 +45,7 @@ and intentional flow.
   - A clean, mobile-friendly interface using a burnt orange/white/black color palette with emoji-based interactions.
 
 [✅] **Cloud-Based Data Storage**
-  - User check-ins, reflections, and feedback are stored in SQLite locally (PostgreSQL available for deployment via Render), making the app scalable and persistent beyond local development.
+  - User check-ins, AI-generated practices, and journal prompts are stored in PostgreSQL via Supabase, making the app scalable and persistent beyond local development.
 
 ---
 
@@ -63,12 +63,13 @@ and intentional flow.
 - SQLAlchemy ORM
 
 **database**
-- PostgreSQL (via Render.com)
-- SQLite for local testing only (optional)
+- PostgreSQL (via Supabase)
+- SQLite for local testing (optional)
 
 **AI/nlp**
-- AI Wrapper (OpenAI or Claude)
-- Custom prompt logic using internal research mappings
+- OpenAI API (GPT-3.5-turbo)
+- Custom prompt engineering with mood-based practice generation
+- Fallback content system for API failures
 
 ---
 
@@ -109,32 +110,33 @@ and intentional flow.
 
 ---
 
-### ⏳ Sprint 3: AI Suggestion Logic + Practice Page (NEXT)
+### ✅ Sprint 3: AI Suggestion Logic + Practice Page (COMPLETED)
 **Goal:** Integrate OpenAI API to generate personalized mindfulness practices and journal prompts based on user's mood.
 
 **Tasks:**
-- [ ] Set up OpenAI API integration
-  - [ ] Add OpenAI API key to `.env`
-  - [ ] Install `openai` Python package
-  - [ ] Create AI service module for API calls
-- [ ] Create database models:
-  - [ ] `Practice` model (exercise suggestions)
-  - [ ] `JournalPrompt` model (reflection prompts)
-- [ ] Update `/practice` route:
-  - [ ] Fetch user's latest check-in (mood + body feeling)
-  - [ ] Call OpenAI API with mood-based prompt
-  - [ ] Parse AI response to extract practice + journal prompt
-  - [ ] Store practice and prompt in database
-  - [ ] Display on practice page
-- [ ] Enhance `/practice` template:
-  - [ ] Show AI-generated mindfulness practice
-  - [ ] Display journal prompt
-  - [ ] Add "Continue to Journal" button → `/reflect`
-  - [ ] Optional: Add practice category icons/tags
-- [ ] Create AI prompt engineering:
-  - [ ] Design system prompt for mindfulness practices
-  - [ ] Map moods to practice types (breathing, meditation, movement, etc.)
-  - [ ] Ensure responses are calming, supportive, and actionable
+- [x] Set up OpenAI API integration
+  - [x] Add OpenAI API key to `.env`
+  - [x] Install `openai` Python package
+  - [x] Create AI service module for API calls
+- [x] Create database models:
+  - [x] `Practice` model (exercise suggestions)
+  - [x] `JournalPrompt` model (reflection prompts)
+- [x] Update `/practice` route:
+  - [x] Fetch user's latest check-in (mood + body feeling)
+  - [x] Call OpenAI API with mood-based prompt
+  - [x] Parse AI response to extract practice + journal prompt
+  - [x] Store practice and prompt in database
+  - [x] Display on practice page
+- [x] Enhance `/practice` template:
+  - [x] Show AI-generated mindfulness practice
+  - [x] Display journal prompt
+  - [x] Add "Continue to Journal" button → `/reflect`
+  - [x] Add practice category icons/tags (emoji-based)
+- [x] Create AI prompt engineering:
+  - [x] Design system prompt for mindfulness practices
+  - [x] Map moods to practice types (breathing, meditation, movement, grounding)
+  - [x] Ensure responses are calming, supportive, and actionable
+  - [x] Add fallback content for each mood if API fails
 
 ---
 

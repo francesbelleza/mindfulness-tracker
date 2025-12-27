@@ -29,8 +29,40 @@ class CheckIn(db.Model):
     body_feeling = db.Column(db.String(200), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Relationships to AI-generated content
+    practice = db.relationship('Practice', backref='checkin', lazy=True, uselist=False)
+    journal_prompt = db.relationship('JournalPrompt', backref='checkin', lazy=True, uselist=False)
+
     def __repr__(self):
         return f'<CheckIn {self.mood} by User {self.user_id} at {self.created_at}>'
+
+
+class Practice(db.Model):
+    """AI-generated mindfulness practice"""
+    __tablename__ = 'practices'
+
+    id = db.Column(db.Integer, primary_key=True)
+    checkin_id = db.Column(db.Integer, db.ForeignKey('user_checkins.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    practice_type = db.Column(db.String(50), nullable=False)  # breathing, meditation, movement, grounding
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Practice {self.title} for CheckIn {self.checkin_id}>'
+
+
+class JournalPrompt(db.Model):
+    """AI-generated journal prompt"""
+    __tablename__ = 'journal_prompts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    checkin_id = db.Column(db.Integer, db.ForeignKey('user_checkins.id'), nullable=False)
+    prompt_text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<JournalPrompt for CheckIn {self.checkin_id}>'
 
 '''--------| TEST SPRINT 0 | DATABASE CONFIGS | ---------
 class TestModel(db.Model):

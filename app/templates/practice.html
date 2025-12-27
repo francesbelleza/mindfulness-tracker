@@ -1,41 +1,51 @@
 {% extends "base.html" %}
-{% block title %}Mindfulness Practice{% endblock %}
+{% block title %}Your Practice{% endblock %}
 
 {% block content %}
 <div class="practice-container">
-  <div class="text-center">
-    <div class="meditation-icon mb-4">
-      🧘‍♀️
+  <div class="text-center mb-4">
+    <div class="meditation-icon mb-3">
+      {% if practice.practice_type == 'breathing' %}🌬️
+      {% elif practice.practice_type == 'meditation' %}🧘‍♀️
+      {% elif practice.practice_type == 'movement' %}🤸‍♀️
+      {% elif practice.practice_type == 'grounding' %}🌿
+      {% else %}✨
+      {% endif %}
     </div>
-
-    <h1 class="display-5 mb-3" style="color: #C3521A; font-weight: 600;">
-      Mindfulness Practices
+    <h1 class="display-5 mb-2" style="color: #C3521A; font-weight: 600;">
+      Your Personalized Practice
     </h1>
+    <p class="text-muted">Tailored to how you're feeling today</p>
+  </div>
 
-    <p class="lead text-muted mb-5">
-      AI-powered personalized suggestions coming soon in Sprint 3!
-    </p>
-
-    <div class="placeholder-card mx-auto mb-5">
-      <h5 style="color: #C3521A; margin-bottom: 16px;">🚧 Under Construction</h5>
-      <p style="color: #6c757d; margin-bottom: 0;">
-        This page will soon feature personalized mindfulness exercises and journal prompts
-        tailored to your daily mood check-ins.
-      </p>
+  <!-- Practice Card -->
+  <div class="practice-card mx-auto mb-4">
+    <div class="practice-header mb-3">
+      <h2 class="practice-title">{{ practice.title }}</h2>
+      <span class="practice-type-badge">{{ practice.practice_type|capitalize }}</span>
     </div>
 
-    <div class="quick-tips mx-auto mb-5">
-      <h6 style="font-weight: 600; margin-bottom: 16px;">In the meantime, try these quick mindfulness tips:</h6>
-      <ul class="text-start" style="color: #495057; line-height: 1.8;">
-        <li>Take 5 deep breaths, counting to 4 on each inhale and exhale</li>
-        <li>Notice 5 things you can see, 4 you can touch, 3 you can hear</li>
-        <li>Spend 2 minutes stretching or moving gently</li>
-        <li>Write down 3 things you're grateful for today</li>
-      </ul>
+    <div class="practice-description">
+      {{ practice.description|replace('\n', '<br>')|safe }}
     </div>
+  </div>
 
-    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 12px 32px;">
+  <!-- Journal Prompt Card -->
+  <div class="journal-card mx-auto mb-4">
+    <div class="journal-icon mb-3">💭</div>
+    <h3 class="journal-heading">Reflect on This</h3>
+    <p class="journal-text">{{ journal_prompt.prompt_text }}</p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="text-center">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg me-2"
+       style="border-radius: 12px; padding: 12px 24px;">
       Back to Home
+    </a>
+    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg"
+       style="border-radius: 12px; padding: 12px 24px;">
+      Continue to Journal
     </a>
   </div>
 </div>
@@ -43,13 +53,13 @@
 <style>
 .practice-container {
   padding: 60px 20px;
-  max-width: 700px;
+  max-width: 750px;
   margin: 0 auto;
-  min-height: 60vh;
+  min-height: 70vh;
 }
 
 .meditation-icon {
-  font-size: 5rem;
+  font-size: 4rem;
   animation: float 3s ease-in-out infinite;
 }
 
@@ -62,43 +72,147 @@
   }
 }
 
-.placeholder-card {
-  background: linear-gradient(135deg, #fff5f0 0%, #ffe8dc 100%);
-  border: 2px dashed #C3521A;
-  border-radius: 16px;
-  padding: 32px 24px;
-  max-width: 500px;
+/* Practice Card */
+.practice-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fef9f7 100%);
+  border: 2px solid #f1e8e3;
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 4px 16px rgba(195, 82, 26, 0.08);
+  max-width: 650px;
+  transition: all 0.3s ease;
 }
 
-.quick-tips {
-  background: white;
-  border: 2px solid #e9ecef;
-  border-radius: 16px;
-  padding: 28px 32px;
-  max-width: 550px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+.practice-card:hover {
+  box-shadow: 0 6px 24px rgba(195, 82, 26, 0.12);
+  transform: translateY(-2px);
 }
 
-.quick-tips ul {
-  margin-bottom: 0;
-  padding-left: 20px;
+.practice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.quick-tips li {
-  margin-bottom: 8px;
+.practice-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #C3521A;
+  margin: 0;
+  flex: 1;
 }
 
+.practice-type-badge {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.practice-description {
+  color: #495057;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-top: 16px;
+  white-space: pre-wrap;
+}
+
+/* Journal Card */
+.journal-card {
+  background: linear-gradient(135deg, #fff9f5 0%, #fff 100%);
+  border: 2px solid #f8e8df;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 3px 12px rgba(195, 82, 26, 0.06);
+  max-width: 650px;
+  text-align: center;
+}
+
+.journal-icon {
+  font-size: 2.5rem;
+  opacity: 0.8;
+}
+
+.journal-heading {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #C3521A;
+  margin-bottom: 16px;
+}
+
+.journal-text {
+  font-size: 1.1rem;
+  color: #495057;
+  line-height: 1.7;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Button Styles */
+.btn-secondary {
+  background: #e9ecef;
+  color: #495057;
+  border: 2px solid #dee2e6;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #dee2e6;
+  color: #343a40;
+  border-color: #adb5bd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #C3521A 0%, #E67E3C 100%);
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(195, 82, 26, 0.3);
+}
+
+/* Responsive */
 @media (max-width: 576px) {
   .practice-container {
-    padding: 40px 20px;
+    padding: 40px 16px;
   }
 
   .meditation-icon {
-    font-size: 4rem;
+    font-size: 3rem;
   }
 
-  .quick-tips {
-    padding: 20px 20px;
+  .practice-card,
+  .journal-card {
+    padding: 24px;
+  }
+
+  .practice-title {
+    font-size: 1.4rem;
+  }
+
+  .practice-description {
+    font-size: 1rem;
+  }
+
+  .btn-lg {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .btn-lg.me-2 {
+    margin-right: 0 !important;
   }
 }
 </style>

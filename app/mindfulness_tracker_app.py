@@ -5,8 +5,9 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime, date
-from app.models import User, CheckIn
+from app.models import User, CheckIn, Practice, JournalPrompt
 from app import db
+from app.ai_service import generate_practice_and_prompt, get_fallback_content
 
 def initial_routes(app):
     @app.route('/signup', methods=['GET', 'POST'])
@@ -87,7 +88,60 @@ def initial_routes(app):
     @app.route('/practice')
     @login_required
     def practice():
-        return render_template('practice.html')
+        # Get user's most recent check-in from today
+        today = date.today()
+        latest_checkin = CheckIn.query.filter(
+            CheckIn.user_id == current_user.id,
+            db.func.date(CheckIn.created_at) == today
+        ).first()
+
+        # If no check-in today, redirect to check-in page
+        if not latest_checkin:
+            flash('Please complete your daily check-in first.', 'info')
+            return redirect(url_for('check_in'))
+
+        # Check if practice already exists for this check-in
+        existing_practice = Practice.query.filter_by(checkin_id=latest_checkin.id).first()
+        existing_prompt = JournalPrompt.query.filter_by(checkin_id=latest_checkin.id).first()
+
+        # If practice already exists, display it
+        if existing_practice and existing_prompt:
+            return render_template('practice.html',
+                                   practice=existing_practice,
+                                   journal_prompt=existing_prompt)
+
+        # Generate new AI content
+        ai_result = generate_practice_and_prompt(
+            mood=latest_checkin.mood,
+            body_feeling=latest_checkin.body_feeling
+        )
+
+        # If AI fails, use fallback content
+        if not ai_result:
+            flash('Using fallback practice (AI service unavailable)', 'warning')
+            ai_result = get_fallback_content(latest_checkin.mood)
+
+        # Save practice to database
+        practice_obj = Practice(
+            checkin_id=latest_checkin.id,
+            title=ai_result['practice']['title'],
+            description=ai_result['practice']['description'],
+            practice_type=ai_result['practice']['type']
+        )
+        db.session.add(practice_obj)
+
+        # Save journal prompt to database
+        prompt_obj = JournalPrompt(
+            checkin_id=latest_checkin.id,
+            prompt_text=ai_result['journal_prompt']
+        )
+        db.session.add(prompt_obj)
+
+        db.session.commit()
+
+        return render_template('practice.html',
+                               practice=practice_obj,
+                               journal_prompt=prompt_obj)
 
     @app.route('/')
     def index():
