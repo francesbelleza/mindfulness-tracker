@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3">Settings</h1>
+    <p class="subtitle">Manage your preferences</p>
+  </div>
+
+  <!-- Settings Card -->
+  <div class="settings-card mx-auto">
+    <!-- Privacy Section -->
+    <div class="settings-section mb-4">
+      <h3 class="section-title mb-3">Privacy</h3>
+
+      <a href="{{ url_for('privacy_summary') }}" class="settings-link">
+        <div class="settings-item">
+          <div>
+            <div class="item-label">Privacy Summary</div>
+            <div class="item-description">Quick overview of how we handle your data</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 4L13 10L7 16" stroke="var(--text-medium)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Notifications Section (Placeholder) -->
+    <div class="settings-section">
+      <h3 class="section-title mb-3">Notifications</h3>
+      <p class="coming-soon-text">Notification preferences coming soon</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.settings-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.settings-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.settings-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+  max-width: 650px;
+}
+
+.section-title {
+  color: var(--text-light);
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  font-size: 1.3rem;
+}
+
+.settings-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: var(--transition-smooth);
+}
+
+.settings-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(232, 168, 124, 0.15);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-smooth);
+  cursor: pointer;
+}
+
+.settings-link:hover .settings-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(232, 168, 124, 0.3);
+  transform: translateX(5px);
+}
+
+.item-label {
+  color: var(--text-light);
+  font-weight: 400;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.item-description {
+  color: var(--text-subtle);
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(232, 168, 124, 0.2);
+  margin: var(--space-xl) 0;
+}
+
+.coming-soon-text {
+  color: var(--text-subtle);
+  font-size: 0.95rem;
+  font-weight: 300;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .settings-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .settings-card {
+    padding: var(--space-xl);
+  }
+}
+</style>
+{% endblock %}

@@ -36,7 +36,7 @@ def generate_practice_and_prompt(mood, body_feeling=None, time_of_day=None):
 
     # System prompt for the AI
     system_prompt = """You are a compassionate mindfulness meditation teacher. Based on the user's mood, body sensations, and time of day, create:
-1. A guided mindfulness practice (2-4 minutes) with clear, spoken-style instructions
+1. A guided mindfulness practice (MINIMUM 1 minute when spoken aloud, ideally 2-4 minutes) with clear, spoken-style instructions
 2. A thoughtful journal prompt for reflection
 
 IMPORTANT: Write the practice description as if you're speaking directly to the user in a calm, guiding voice. Use "you" language and present tense. Make it sound like guided meditation audio that will be read aloud with natural pauses.

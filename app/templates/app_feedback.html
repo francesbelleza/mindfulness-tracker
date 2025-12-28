@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% block title %}Send Feedback{% endblock %}
+
+{% block content %}
+<div class="feedback-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3">Share Your Feedback</h1>
+    <p class="subtitle">Help us improve Recalibrate</p>
+  </div>
+
+  <form id="feedbackForm" method="POST" action="https://formspree.io/f/mvzorgoz" class="mx-auto" style="max-width: 650px;">
+
+    <!-- Feedback Type Selection -->
+    <div class="mb-4">
+      <label class="form-label d-block mb-3" style="font-weight: 500;">
+        What type of feedback do you have?
+      </label>
+
+      <div class="feedback-type-grid">
+        <!-- Bug Report -->
+        <input type="radio" class="btn-check" name="feedback_type" id="type-bug" value="Bug" required>
+        <label class="feedback-type-card" for="type-bug">
+          <div class="feedback-type-label">Bug Report</div>
+        </label>
+
+        <!-- Feature Request -->
+        <input type="radio" class="btn-check" name="feedback_type" id="type-feature" value="Feature" required>
+        <label class="feedback-type-card" for="type-feature">
+          <div class="feedback-type-label">Feature Request</div>
+        </label>
+
+        <!-- General Feedback -->
+        <input type="radio" class="btn-check" name="feedback_type" id="type-general" value="General" required>
+        <label class="feedback-type-card" for="type-general">
+          <div class="feedback-type-label">General</div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="mb-4">
+      <label class="form-label" style="font-weight: 500;">
+        Your Feedback
+      </label>
+      <textarea
+        name="message"
+        class="form-control"
+        rows="6"
+        placeholder="Tell us what's on your mind..."
+        style="resize: none;"
+        required></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 14px;">
+        Send Feedback
+      </button>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg" style="border-radius: 12px; padding: 14px;">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+<style>
+.feedback-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.feedback-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.form-label {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-medium);
+  letter-spacing: 0.5px;
+}
+
+/* Feedback Type Grid */
+.feedback-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.feedback-type-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-soft);
+}
+
+.feedback-type-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+}
+
+.btn-check:checked + .feedback-type-card {
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  border-color: var(--sunset-peach);
+  box-shadow: var(--glow-medium);
+}
+
+.btn-check:checked + .feedback-type-card .feedback-type-label {
+  color: var(--bg-primary);
+}
+
+.feedback-type-label {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
+}
+
+.form-control {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.2);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  color: var(--text-light);
+  font-weight: 300;
+  transition: var(--transition-smooth);
+}
+
+.form-control:focus {
+  background: #1e3a45;
+  border-color: var(--sunset-peach);
+  box-shadow: 0 0 0 3px rgba(232, 168, 124, 0.1);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--text-subtle);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feedback-type-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  .feedback-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+</style>
+
+<script>
+// Handle form submission with AJAX to redirect to our custom thank you page
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  // Disable submit button to prevent double submission
+  submitButton.disabled = true;
+  submitButton.textContent = 'Sending...';
+
+  // Submit to Formspree
+  fetch(form.action, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      // Redirect to our custom thank you page
+      window.location.href = "{{ url_for('thank_you_feedback') }}";
+    } else {
+      response.json().then(data => {
+        alert('Oops! There was a problem submitting your feedback. Please try again.');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Feedback';
+      });
+    }
+  })
+  .catch(error => {
+    alert('Oops! There was a problem submitting your feedback. Please try again.');
+    submitButton.disabled = false;
+    submitButton.textContent = 'Send Feedback';
+  });
+});
+</script>
+{% endblock %}

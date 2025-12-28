@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<div class="privacy-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3">Privacy Policy</h1>
+    <p class="subtitle">How we protect and use your information</p>
+  </div>
+
+  <!-- Privacy Policy Card -->
+  <div class="privacy-card mx-auto">
+    <div class="privacy-content">
+      <p class="last-updated">Last updated: December 27, 2025</p>
+
+      <p class="intro-text">
+        Recalibrate is a mindfulness web application designed to support reflection and self-awareness.
+        We collect only the information necessary to provide this experience.
+      </p>
+
+      <div class="policy-section">
+        <h2 class="section-heading">Information We Collect</h2>
+
+        <h3 class="subsection-heading">Account Information</h3>
+        <p>When you create an account, we collect basic information such as your email address to operate the app.</p>
+
+        <h3 class="subsection-heading">Journal Entries</h3>
+        <ul class="policy-list">
+          <li>Journal entries are private by default.</li>
+          <li>Journal content is visible only to you.</li>
+          <li>We do not use journal entries to train AI models.</li>
+        </ul>
+
+        <h3 class="subsection-heading">Mood and Body Check-Ins</h3>
+        <ul class="policy-list">
+          <li>Mood and body check-ins are used to generate personalized guided practices.</li>
+          <li>This data is stored so you can reflect on patterns over time.</li>
+          <li>Mood and body check-in data may be processed by AI systems to create guided practices.</li>
+        </ul>
+
+        <h3 class="subsection-heading">Guided Practice Feedback</h3>
+        <ul class="policy-list">
+          <li>Feedback you provide on guided mindfulness practices is linked to your user account.</li>
+          <li>We use this feedback to improve and refine future guided practices.</li>
+          <li>Practice feedback may be reviewed internally or used to improve AI-generated practices.</li>
+          <li>Journal entries are never included in this process.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2 class="section-heading">How We Use Information</h2>
+        <p>We use collected information to:</p>
+        <ul class="policy-list">
+          <li>Provide and maintain the app</li>
+          <li>Display your personal reflections and history</li>
+          <li>Generate and improve guided practices</li>
+          <li>Ensure reliability and security</li>
+        </ul>
+        <p class="emphasis-text">We do not sell your personal information.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2 class="section-heading">Your Control Over Your Data</h2>
+        <ul class="policy-list">
+          <li>You may delete your account at any time.</li>
+          <li>Deleting your account removes your personal data, including journal entries, mood and body check-ins, and practice feedback, from our active systems.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2 class="section-heading">Data Security</h2>
+        <p>We take reasonable measures to protect your information, but no system can guarantee absolute security.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2 class="section-heading">Changes to This Policy</h2>
+        <p>We may update this policy as the app evolves. Updates will be reflected on this page.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2 class="section-heading">Contact</h2>
+        <p>If you have questions about this policy, please <a href="{{ url_for('app_feedback') }}" class="inline-link">send us a message</a>.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('privacy_summary') }}" class="summary-link">
+          Read Privacy Summary →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="text-center mt-4">
+    <a href="{{ url_for('index') }}" class="back-link">← Back to Home</a>
+  </div>
+</div>
+
+<style>
+.privacy-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.privacy-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.privacy-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+  max-width: 850px;
+}
+
+.privacy-content {
+  color: var(--text-medium);
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+.privacy-content p {
+  margin-bottom: var(--space-md);
+}
+
+.last-updated {
+  text-align: center;
+  color: var(--text-subtle);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: var(--space-lg);
+}
+
+.intro-text {
+  font-size: 1.05rem;
+  color: var(--text-medium);
+  margin-bottom: var(--space-xl);
+  line-height: 1.9;
+}
+
+.policy-section {
+  margin-bottom: var(--space-2xl);
+}
+
+.section-heading {
+  color: var(--text-light);
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 1.2px;
+  margin-bottom: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.subsection-heading {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.policy-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: var(--space-md);
+}
+
+.policy-list li {
+  padding: 0.5rem 0;
+  padding-left: var(--space-lg);
+  position: relative;
+  font-size: 1rem;
+  color: var(--text-medium);
+  line-height: 1.7;
+}
+
+.policy-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--sunset-peach);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.emphasis-text {
+  font-weight: 400;
+  color: var(--text-light);
+  margin-top: var(--space-md);
+}
+
+.inline-link {
+  color: var(--sunset-peach);
+  text-decoration: none;
+  font-weight: 400;
+  transition: var(--transition-smooth);
+}
+
+.inline-link:hover {
+  color: var(--text-light);
+  text-decoration: underline;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(232, 168, 124, 0.2);
+  margin: var(--space-2xl) 0 var(--space-lg) 0;
+}
+
+.summary-link {
+  color: var(--sunset-peach);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
+}
+
+.summary-link:hover {
+  color: var(--text-light);
+  text-decoration: underline;
+}
+
+.back-link {
+  color: var(--text-medium);
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+  color: var(--sunset-peach);
+}
+
+@media (max-width: 768px) {
+  .privacy-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .privacy-card {
+    padding: var(--space-xl);
+  }
+}
+</style>
+{% endblock %}

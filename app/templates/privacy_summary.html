@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Privacy Summary{% endblock %}
+
+{% block content %}
+<div class="privacy-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3">Privacy Summary</h1>
+    <p class="subtitle">A quick overview of how we handle your data</p>
+  </div>
+
+  <!-- Privacy Content Card -->
+  <div class="privacy-card mx-auto">
+    <div class="privacy-content">
+      <h2 class="privacy-heading">Privacy at Recalibrate</h2>
+      <p class="intro-text">Your reflections are personal, and we take that seriously.</p>
+
+      <div class="privacy-section">
+        <h3 class="section-heading">Journal entries</h3>
+        <ul class="privacy-list">
+          <li>Your journal entries are private and only visible to you.</li>
+          <li>We do not use journal entries to train AI models.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3 class="section-heading">Mood and body check-ins</h3>
+        <ul class="privacy-list">
+          <li>Mood and body check-ins are used to generate personalized guided practices.</li>
+          <li>This data is also stored so you can reflect on patterns over time.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3 class="section-heading">Guided practice feedback</h3>
+        <ul class="privacy-list">
+          <li>Feedback you share on guided practices is linked to your account.</li>
+          <li>We use this feedback to improve future guided practices.</li>
+          <li>Journal content is never included in this process.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3 class="section-heading">Your control</h3>
+        <ul class="privacy-list">
+          <li>You may delete your account at any time.</li>
+          <li>Deleting your account removes your personal data from our systems.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="text-center">
+      <a href="{{ url_for('privacy_policy') }}" class="btn btn-primary">Read Full Privacy Policy</a>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="text-center mt-4">
+    <a href="{{ url_for('settings') }}" class="back-link">← Back to Settings</a>
+  </div>
+</div>
+
+<style>
+.privacy-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.privacy-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.privacy-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+  max-width: 750px;
+}
+
+.privacy-content {
+  color: var(--text-medium);
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+.privacy-heading {
+  color: var(--text-light);
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.intro-text {
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  font-style: italic;
+}
+
+.privacy-section {
+  margin-bottom: var(--space-lg);
+}
+
+.section-heading {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-sm);
+}
+
+.privacy-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.privacy-list li {
+  padding: 0.5rem 0;
+  padding-left: var(--space-lg);
+  position: relative;
+  font-size: 1rem;
+  color: var(--text-medium);
+}
+
+.privacy-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--sunset-peach);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(232, 168, 124, 0.2);
+  margin: var(--space-xl) 0;
+}
+
+.back-link {
+  color: var(--text-medium);
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+  color: var(--sunset-peach);
+}
+
+@media (max-width: 768px) {
+  .privacy-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .privacy-card {
+    padding: var(--space-xl);
+  }
+}
+</style>
+{% endblock %}

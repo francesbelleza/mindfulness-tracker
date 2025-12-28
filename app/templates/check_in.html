@@ -33,7 +33,7 @@
 
     <!-- Mood Selection -->
     <div class="mb-5">
-      <label class="form-label d-block text-center mb-4">
+      <label class="form-label d-block mb-4" style="text-align: center;">
         Select your mood
       </label>
 
@@ -57,6 +57,13 @@
         <label class="mood-card" for="mood-anxious">
           <div class="mood-indicator mood-anxious"></div>
           <div class="mood-label">Anxious</div>
+        </label>
+
+        <!-- Angry -->
+        <input type="radio" class="btn-check" name="mood" id="mood-angry" value="Angry" required>
+        <label class="mood-card" for="mood-angry">
+          <div class="mood-indicator mood-angry"></div>
+          <div class="mood-label">Angry</div>
         </label>
 
         <!-- Sad -->
@@ -122,17 +129,16 @@
 .time-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-lg);
-  max-width: 450px;
+  gap: var(--space-md);
+  max-width: 350px;
   margin: 0 auto;
 }
 
 .time-card {
-  background: rgba(38, 60, 65, 0.3);
-  backdrop-filter: blur(10px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.2);
   border-radius: var(--radius-lg);
-  padding: var(--space-xl);
+  padding: var(--space-lg);
   text-align: center;
   cursor: pointer;
   transition: var(--transition-smooth);
@@ -165,19 +171,24 @@
 
 /* Mood Grid - Dark cards with colored indicators */
 .mood-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-lg);
-  max-width: 700px;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  max-width: 900px;
   margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.mood-grid .mood-card {
+  flex: 0 0 auto;
+  width: 110px;
 }
 
 .mood-card {
-  background: rgba(38, 60, 65, 0.3);
-  backdrop-filter: blur(10px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.2);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg);
+  padding: var(--space-md);
   text-align: center;
   cursor: pointer;
   transition: var(--transition-smooth);
@@ -205,15 +216,15 @@
 }
 
 .btn-check:checked + .mood-card .mood-indicator {
-  background: white;
-  border-color: white;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  background: var(--bg-primary);
+  border-color: var(--bg-primary);
+  box-shadow: 0 0 10px rgba(20, 54, 66, 0.6);
 }
 
 /* Mood Indicators - Circular colored dots with soft glow */
 .mood-indicator {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full);
   border: 3px solid;
   transition: var(--transition-smooth);
@@ -235,6 +246,11 @@
   border-color: #e17055;
 }
 
+.mood-angry {
+  background: #d63031;
+  border-color: #d63031;
+}
+
 .mood-sad {
   background: #74b9ff;
   border-color: #74b9ff;
@@ -249,7 +265,7 @@
 }
 
 .form-control {
-  background: rgba(38, 60, 65, 0.3);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.2);
   border-radius: var(--radius-md);
   padding: 14px 18px;
@@ -259,7 +275,7 @@
 }
 
 .form-control:focus {
-  background: rgba(38, 60, 65, 0.5);
+  background: #1e3a45;
   border-color: var(--sunset-peach);
   box-shadow: 0 0 0 3px rgba(232, 168, 124, 0.1);
   outline: none;
@@ -274,10 +290,23 @@
   font-size: 1rem;
 }
 
+@media (max-width: 768px) {
+  .mood-grid {
+    gap: var(--space-sm);
+  }
+
+  .mood-grid .mood-card {
+    width: 100px;
+  }
+}
+
 @media (max-width: 576px) {
   .mood-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .mood-grid .mood-card {
+    width: 90px;
   }
 
   .check-in-container {
@@ -285,8 +314,8 @@
   }
 
   .mood-indicator {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 }
 </style>

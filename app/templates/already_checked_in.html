@@ -4,33 +4,38 @@
 {% block content %}
 <div class="already-checked-container">
   <div class="text-center">
+    <!-- Check Mark Icon -->
     <div class="check-mark-circle mb-4">
       <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="40" cy="40" r="38" stroke="#C3521A" stroke-width="4"/>
-        <path d="M25 42L35 52L55 28" stroke="#C3521A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="40" cy="40" r="38" stroke="var(--sunset-peach)" stroke-width="4"/>
+        <path d="M25 42L35 52L55 28" stroke="var(--sunset-peach)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
 
-    <h1 class="display-5 mb-3" style="color: #C3521A; font-weight: 600;">
-      You've already checked in today!
-    </h1>
+    <!-- Message Card -->
+    <div class="message-card mx-auto mb-5">
+      <h1 class="display-5 mb-3">
+        You've already checked in!
+      </h1>
 
-    <p class="lead text-muted mb-4">
-      Great job staying mindful. Come back tomorrow for your next check-in.
-    </p>
-
-    <div class="info-card mx-auto mb-4">
-      <p class="mb-2" style="font-size: 0.95rem; color: #6c757d;">
-        ✨ Remember: You can only check in once per day to maintain mindful consistency.
+      <p class="message-text">
+        {% if time_of_day == 'Morning' %}
+          Great job starting your day mindfully.<br>
+          Check back later for your evening practice.
+        {% elif time_of_day == 'Night' %}
+          Wonderful work ending your day with intention.<br>
+          Check back tomorrow morning for your next practice.
+        {% else %}
+          Great job staying mindful today.<br>
+          Come back later for your next check-in.
+        {% endif %}
       </p>
     </div>
 
-    <div class="button-group mt-5">
-      <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg me-2" style="border-radius: 12px; padding: 12px 32px;">
-        Go Home
-      </a>
-      <a href="{{ url_for('practice') }}" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 12px 32px;">
-        Practice Mindfulness
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">
+        Return Home
       </a>
     </div>
   </div>
@@ -38,17 +43,17 @@
 
 <style>
 .already-checked-container {
-  padding: 80px 20px;
-  max-width: 700px;
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 800px;
   margin: 0 auto;
-  min-height: 60vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .check-mark-circle {
-  animation: scaleIn 0.5s ease-out;
+  animation: scaleIn 0.6s ease-out;
 }
 
 @keyframes scaleIn {
@@ -65,35 +70,52 @@
   }
 }
 
-.info-card {
-  background: #f8f9fa;
-  border-left: 4px solid #C3521A;
-  padding: 16px 24px;
-  border-radius: 8px;
-  max-width: 500px;
+.message-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+  max-width: 650px;
+}
+
+.message-card h1 {
+  color: var(--text-light);
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.message-text {
+  font-size: 1.15rem;
+  color: var(--text-medium);
+  line-height: 2;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
 
 .button-group {
   display: flex;
-  gap: 12px;
+  gap: var(--space-md);
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.btn-outline-primary {
-  border-color: #C3521A;
-  color: #C3521A;
-}
-
-.btn-outline-primary:hover {
-  background-color: #C3521A;
-  border-color: #C3521A;
-  color: white;
-}
-
 @media (max-width: 576px) {
   .already-checked-container {
-    padding: 40px 20px;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .message-card {
+    padding: var(--space-xl);
+  }
+
+  .message-card h1 {
+    font-size: 2rem;
+  }
+
+  .message-text {
+    font-size: 1rem;
   }
 
   .button-group {
@@ -103,7 +125,6 @@
 
   .button-group .btn {
     width: 100%;
-    margin: 0 !important;
   }
 }
 </style>

@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+{% block title %}Reflection Space{% endblock %}
+
+{% block content %}
+<div class="reflection-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3">Your Reflection Space</h1>
+    <p class="subtitle">A gentle place to review your mindfulness journey</p>
+  </div>
+
+  <!-- Check-in Streak -->
+  <div class="streak-card mb-5">
+    {% if streak > 0 %}
+      <p class="streak-text">You've checked in {{ streak }} day{{ 's' if streak != 1 else '' }} in a row 🌅</p>
+      <p class="streak-encouragement">Keep nurturing your practice</p>
+    {% else %}
+      <p class="streak-text">Start your journey today</p>
+      <p class="streak-encouragement">Check in to begin your streak</p>
+    {% endif %}
+  </div>
+
+  <!-- Weekly Mood Visualization -->
+  <div class="mood-viz-section mb-5">
+    <h3 class="section-title mb-4">This Week's Emotional Flow</h3>
+
+    <div class="mood-visualization">
+      <!-- AM Mood Strip -->
+      <div class="mood-strip-container mb-2">
+        <label class="mood-strip-label">Morning</label>
+        <div class="mood-strip am-strip" id="amMoodStrip"></div>
+      </div>
+
+      <!-- PM Mood Strip -->
+      <div class="mood-strip-container">
+        <label class="mood-strip-label">Evening</label>
+        <div class="mood-strip pm-strip" id="pmMoodStrip"></div>
+      </div>
+
+      {% if not week_checkins %}
+        <p class="no-data-message">Check in this week to see your emotional flow</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Journal Timeline -->
+  <div class="journal-timeline-section">
+    <h3 class="section-title mb-4">Journal Timeline</h3>
+
+    {% if journal_entries %}
+      <div class="timeline">
+        {% for entry in journal_entries[:7] %}
+          <div class="timeline-entry">
+            <div class="entry-header">
+              <div class="entry-date">
+                {{ entry.checkin.created_at.strftime('%B %d, %Y') }}
+              </div>
+              <div class="entry-time-badge">
+                {{ entry.checkin.time_of_day }}
+              </div>
+            </div>
+
+            <div class="entry-mood">
+              <span class="mood-indicator mood-{{ entry.checkin.mood|lower }}"></span>
+              <span class="mood-label">{{ entry.checkin.mood }}</span>
+            </div>
+
+            <div class="entry-content">
+              {{ entry.entry_text[:200] }}{% if entry.entry_text|length > 200 %}...{% endif %}
+            </div>
+
+            {% if entry.intention_for_day %}
+              <div class="entry-intention">
+                <strong>Intention:</strong> {{ entry.intention_for_day }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if journal_entries|length > 7 %}
+        <div class="text-center mt-4">
+          <p class="view-more-text">Showing this week's entries</p>
+          <p class="text-subtle" style="font-size: 0.9rem;">Date filtering coming soon</p>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="no-entries-card">
+        <p class="no-entries-message">Your journal entries will appear here</p>
+        <p class="text-subtle">Complete a check-in and reflection to get started</p>
+        <a href="{{ url_for('check_in') }}" class="btn btn-primary mt-3">Start Check-In</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+.reflection-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.reflection-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.section-title {
+  color: var(--text-light);
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  font-size: 1.5rem;
+}
+
+/* Streak Card */
+.streak-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  text-align: center;
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+}
+
+.streak-text {
+  font-size: 1.3rem;
+  color: var(--text-light);
+  font-weight: 300;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.streak-encouragement {
+  font-size: 1rem;
+  color: var(--text-medium);
+  font-weight: 300;
+  margin: 0.5rem 0 0 0;
+  letter-spacing: 0.5px;
+}
+
+/* Mood Visualization */
+.mood-viz-section {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+}
+
+.mood-strip-container {
+  margin-bottom: var(--space-md);
+}
+
+.mood-strip-label {
+  display: block;
+  color: var(--text-medium);
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.mood-strip {
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, #3d4f54 0%, #3d4f54 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.no-data-message {
+  text-align: center;
+  color: var(--text-subtle);
+  font-size: 0.95rem;
+  margin-top: var(--space-md);
+  font-weight: 300;
+}
+
+/* Journal Timeline */
+.journal-timeline-section {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.timeline-entry {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(232, 168, 124, 0.15);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: var(--transition-smooth);
+}
+
+.timeline-entry:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(232, 168, 124, 0.3);
+  transform: translateX(5px);
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.entry-date {
+  color: var(--text-light);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  font-size: 1rem;
+}
+
+.entry-time-badge {
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+  color: var(--bg-primary);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.entry-mood {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: var(--space-sm);
+}
+
+.mood-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Mood-specific colors */
+.mood-happy { background-color: #f4d03f; }
+.mood-calm { background-color: #85c1e2; }
+.mood-anxious { background-color: #e17055; }
+.mood-angry { background-color: #d63031; }
+.mood-sad { background-color: #74b9ff; }
+
+.mood-label {
+  color: var(--text-medium);
+  font-size: 0.95rem;
+  font-weight: 300;
+}
+
+.entry-content {
+  color: var(--text-medium);
+  line-height: 1.8;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+  margin-bottom: var(--space-sm);
+}
+
+.entry-intention {
+  color: var(--text-subtle);
+  font-size: 0.9rem;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.view-more-text {
+  color: var(--text-medium);
+  font-weight: 300;
+  margin-bottom: 0.25rem;
+}
+
+.no-entries-card {
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.no-entries-message {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reflection-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+</style>
+
+<script>
+// Helper function to get mood color
+function getMoodColor(mood) {
+  const moodColors = {
+    'Happy': '#f4d03f',
+    'Calm': '#85c1e2',
+    'Anxious': '#e17055',
+    'Angry': '#d63031',
+    'Sad': '#74b9ff'
+  };
+  return moodColors[mood] || '#3d4f54';
+}
+
+// Build mood visualization strips
+const weekCheckins = {{ week_checkins | tojson }};
+
+if (weekCheckins && weekCheckins.length > 0) {
+  // Group check-ins by day and time of day
+  const moodsByDay = {};
+
+  weekCheckins.forEach(checkin => {
+    const date = new Date(checkin.created_at).toLocaleDateString();
+    if (!moodsByDay[date]) {
+      moodsByDay[date] = { am: null, pm: null };
+    }
+
+    if (checkin.time_of_day === 'Morning') {
+      moodsByDay[date].am = checkin.mood;
+    } else {
+      moodsByDay[date].pm = checkin.mood;
+    }
+  });
+
+  // Create gradient for AM strip
+  const amColors = [];
+  const pmColors = [];
+
+  Object.values(moodsByDay).forEach(day => {
+    if (day.am) amColors.push(getMoodColor(day.am));
+    if (day.pm) pmColors.push(getMoodColor(day.pm));
+  });
+
+  // Apply gradients
+  if (amColors.length > 0) {
+    const amGradient = amColors.length === 1
+      ? amColors[0]
+      : `linear-gradient(90deg, ${amColors.join(', ')})`;
+    document.getElementById('amMoodStrip').style.background = amGradient;
+  }
+
+  if (pmColors.length > 0) {
+    const pmGradient = pmColors.length === 1
+      ? pmColors[0]
+      : `linear-gradient(90deg, ${pmColors.join(', ')})`;
+    document.getElementById('pmMoodStrip').style.background = pmGradient;
+  }
+}
+</script>
+
+{% endblock %}

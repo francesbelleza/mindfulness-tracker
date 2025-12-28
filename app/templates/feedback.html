@@ -7,7 +7,7 @@
     <h1 class="display-5 mb-2">
       How Was Your Practice?
     </h1>
-    <p class="subtitle">Your feedback helps us personalize your experience</p>
+    <p class="subtitle">Practice feedback helps us improve future experiences</p>
   </div>
 
   <!-- Practice Recap -->
@@ -24,35 +24,35 @@
       <label class="feedback-label">How did you feel after this practice?</label>
       <div class="emoji-rating-grid">
         <!-- Rating 1 -->
-        <input type="radio" class="btn-check" name="rating" id="rating-1" value="1" required {% if existing_feedback and existing_feedback.rating == 1 %}checked{% endif %}>
+        <input type="radio" class="btn-check" name="rating" id="rating-1" value="1" {% if existing_feedback and existing_feedback.rating == 1 %}checked{% endif %}>
         <label class="emoji-card" for="rating-1">
           <div class="emoji">😞</div>
           <div class="emoji-label">Not Great</div>
         </label>
 
         <!-- Rating 2 -->
-        <input type="radio" class="btn-check" name="rating" id="rating-2" value="2" required {% if existing_feedback and existing_feedback.rating == 2 %}checked{% endif %}>
+        <input type="radio" class="btn-check" name="rating" id="rating-2" value="2" {% if existing_feedback and existing_feedback.rating == 2 %}checked{% endif %}>
         <label class="emoji-card" for="rating-2">
           <div class="emoji">😐</div>
           <div class="emoji-label">Okay</div>
         </label>
 
         <!-- Rating 3 -->
-        <input type="radio" class="btn-check" name="rating" id="rating-3" value="3" required {% if existing_feedback and existing_feedback.rating == 3 %}checked{% endif %}>
+        <input type="radio" class="btn-check" name="rating" id="rating-3" value="3" {% if existing_feedback and existing_feedback.rating == 3 %}checked{% endif %}>
         <label class="emoji-card" for="rating-3">
           <div class="emoji">🙂</div>
           <div class="emoji-label">Good</div>
         </label>
 
         <!-- Rating 4 -->
-        <input type="radio" class="btn-check" name="rating" id="rating-4" value="4" required {% if existing_feedback and existing_feedback.rating == 4 %}checked{% endif %}>
+        <input type="radio" class="btn-check" name="rating" id="rating-4" value="4" {% if existing_feedback and existing_feedback.rating == 4 %}checked{% endif %}>
         <label class="emoji-card" for="rating-4">
           <div class="emoji">😊</div>
           <div class="emoji-label">Great</div>
         </label>
 
         <!-- Rating 5 -->
-        <input type="radio" class="btn-check" name="rating" id="rating-5" value="5" required {% if existing_feedback and existing_feedback.rating == 5 %}checked{% endif %}>
+        <input type="radio" class="btn-check" name="rating" id="rating-5" value="5" {% if existing_feedback and existing_feedback.rating == 5 %}checked{% endif %}>
         <label class="emoji-card" for="rating-5">
           <div class="emoji">🤩</div>
           <div class="emoji-label">Amazing</div>
@@ -99,12 +99,12 @@
 
     <!-- Submit Buttons -->
     <div class="button-group">
-      <a href="{{ url_for('reflect') }}" class="btn btn-secondary btn-lg">
-        Back to Journal
-      </a>
       <button type="submit" class="btn btn-primary btn-lg">
         Complete Session
       </button>
+      <a href="{{ url_for('thank') }}" class="btn btn-secondary btn-lg">
+        Skip for now
+      </a>
     </div>
   </form>
 </div>
@@ -130,8 +130,7 @@
 
 /* Practice Recap */
 .practice-recap {
-  background: rgba(165, 99, 54, 0.3);
-  backdrop-filter: blur(20px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.3);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
@@ -161,8 +160,7 @@
 
 /* Feedback Sections */
 .feedback-section {
-  background: rgba(165, 99, 54, 0.3);
-  backdrop-filter: blur(20px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.3);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
@@ -183,24 +181,23 @@
 .emoji-rating-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   max-width: 100%;
   margin: 0 auto;
 }
 
 .emoji-card {
-  background: rgba(38, 60, 65, 0.3);
-  backdrop-filter: blur(10px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.2);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg);
+  padding: var(--space-md);
   text-align: center;
   cursor: pointer;
   transition: var(--transition-smooth);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   box-shadow: var(--shadow-soft);
 }
 
@@ -221,7 +218,7 @@
 }
 
 .emoji {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: var(--space-xs);
   transition: var(--transition-smooth);
 }
@@ -238,20 +235,19 @@
 .toggle-group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-md);
-  max-width: 400px;
+  gap: var(--space-sm);
+  max-width: 320px;
   margin: 0 auto;
 }
 
 .toggle-option {
-  background: rgba(38, 60, 65, 0.3);
-  backdrop-filter: blur(10px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.2);
   border-radius: var(--radius-md);
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
   text-align: center;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 300;
   color: var(--text-light);
   transition: var(--transition-smooth);
@@ -275,20 +271,19 @@
 .pacing-group {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md);
-  max-width: 550px;
+  gap: var(--space-sm);
+  max-width: 450px;
   margin: 0 auto;
 }
 
 .pacing-option {
-  background: rgba(38, 60, 65, 0.3);
-  backdrop-filter: blur(10px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.2);
   border-radius: var(--radius-md);
-  padding: var(--space-md);
+  padding: var(--space-sm);
   text-align: center;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 300;
   color: var(--text-light);
   transition: var(--transition-smooth);

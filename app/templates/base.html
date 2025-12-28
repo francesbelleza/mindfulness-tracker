@@ -64,57 +64,129 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-                   'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-                   'Helvetica Neue', sans-serif;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+                   'Oxygen', 'Ubuntu', 'Cantarell', 'Helvetica Neue', Arial, sans-serif;
       font-weight: 300;
       background: linear-gradient(180deg,
-        var(--bg-primary) 0%,
-        #1a3a44 50%,
-        #1f3d47 100%);
+        #d4917e 0%,
+        #a87864 20%,
+        #6d5f5a 40%,
+        #3d4f54 60%,
+        #1a3a44 80%,
+        var(--bg-primary) 100%);
       background-attachment: fixed;
       color: var(--text-medium);
-      line-height: 1.8;
+      line-height: 1.9;
       min-height: 100vh;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
     }
 
-    /* Minimal Dark Navbar */
+    /* Transparent Navbar */
     .navbar {
-      background: rgba(20, 54, 66, 0.6) !important;
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(232, 168, 124, 0.1);
-      padding: var(--space-md) 0;
+      background: transparent !important;
+      border-bottom: none;
+      padding: var(--space-lg) 0;
       box-shadow: none;
     }
 
     .navbar-brand {
-      font-size: 1.4rem;
-      font-weight: 300;
-      color: var(--text-accent) !important;
-      letter-spacing: 2px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--bg-primary) !important;
+      letter-spacing: 4px;
       transition: var(--transition-smooth);
     }
 
     .navbar-brand:hover {
-      color: var(--text-light) !important;
-      text-shadow: var(--glow-subtle);
+      color: #0d2630 !important;
+      transform: translateY(-1px);
     }
 
-    .nav-link {
-      color: var(--text-medium) !important;
+    /* Hamburger Menu */
+    .hamburger-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: var(--transition-smooth);
+    }
+
+    .hamburger-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .hamburger-line {
+      width: 28px;
+      height: 3px;
+      background: var(--bg-primary);
+      border-radius: 2px;
+      transition: var(--transition-smooth);
+    }
+
+    /* Dropdown Menu */
+    .nav-dropdown {
+      position: absolute;
+      top: 80px;
+      right: 0;
+      background: #1e3a45;
+      border: 1px solid rgba(232, 168, 124, 0.3);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card), var(--glow-subtle);
+      min-width: 220px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all var(--transition-smooth);
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .nav-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-item {
+      display: block;
+      padding: 16px 24px;
+      color: var(--text-light);
+      text-decoration: none;
       font-weight: 300;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      transition: var(--transition-smooth);
+      border-bottom: 1px solid rgba(232, 168, 124, 0.1);
+    }
+
+    .nav-dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .nav-dropdown-item:hover {
+      background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
+      color: var(--bg-primary);
+      padding-left: 28px;
+    }
+
+    .auth-links a {
+      color: var(--bg-primary);
+      font-weight: 500;
       font-size: 0.95rem;
-      padding: var(--space-xs) var(--space-md) !important;
+      padding: 8px 20px;
       border-radius: var(--radius-sm);
       transition: var(--transition-smooth);
       margin: 0 var(--space-xs);
       letter-spacing: 1px;
+      text-decoration: none;
     }
 
-    .nav-link:hover {
-      background: rgba(232, 168, 124, 0.1);
-      color: var(--text-accent) !important;
+    .auth-links a:hover {
+      background: rgba(20, 54, 66, 0.1);
+      transform: translateY(-1px);
     }
 
     /* Soft Sunset Buttons */
@@ -123,9 +195,9 @@
       border: none;
       border-radius: var(--radius-lg);
       padding: 14px 40px;
-      font-weight: 300;
+      font-weight: 500;
       font-size: 1rem;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
       transition: var(--transition-smooth);
       color: var(--bg-primary);
       box-shadow: var(--glow-subtle);
@@ -144,9 +216,9 @@
       border: 1px solid rgba(232, 168, 124, 0.3);
       border-radius: var(--radius-lg);
       padding: 13px 38px;
-      font-weight: 300;
+      font-weight: 500;
       font-size: 1rem;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
       transition: var(--transition-smooth);
     }
 
@@ -162,9 +234,9 @@
       color: var(--sunset-peach);
       border-radius: var(--radius-lg);
       padding: 13px 38px;
-      font-weight: 300;
+      font-weight: 500;
       font-size: 1rem;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
       transition: var(--transition-smooth);
       background: transparent;
     }
@@ -236,47 +308,86 @@
     /* Soft Headings */
     h1, h2, h3, h4, h5, h6 {
       color: var(--text-light);
-      font-weight: 300;
+      font-weight: 400;
       line-height: 1.4;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
 
-    h1 { font-size: 2.5rem; }
-    h2 { font-size: 2rem; }
-    h3 { font-size: 1.6rem; }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    h2 {
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: 1.8px;
+    }
+    h3 {
+      font-size: 1.6rem;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+    }
+
+    /* Footer */
+    .app-footer {
+      background: transparent;
+      padding: var(--space-xl) 0;
+      margin-top: var(--space-2xl);
+      border-top: 1px solid rgba(232, 168, 124, 0.1);
+      text-align: center;
+    }
+
+    .app-footer p {
+      color: var(--text-subtle);
+      font-size: 0.9rem;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .app-footer a {
+      color: var(--text-accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition-smooth);
+    }
+
+    .app-footer a:hover {
+      color: var(--text-light);
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Modern Navbar -->
+  <!-- Transparent Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="{{ url_for('index') }}">
         recalibrate
       </a>
-      <button class="navbar-toggler" type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navMenu"
-              aria-controls="navMenu"
-              aria-expanded="false"
-              aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto">
-          {% if current_user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
-            </li>
-          {% endif %}
-        </ul>
+      <div class="ms-auto" style="position: relative;">
+        {% if current_user.is_authenticated %}
+          <!-- Hamburger Menu Button -->
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="nav-dropdown" id="navDropdown">
+            <a href="{{ url_for('reflection_space') }}" class="nav-dropdown-item">Reflection Space</a>
+            <a href="{{ url_for('profile') }}" class="nav-dropdown-item">Profile</a>
+            <a href="{{ url_for('settings') }}" class="nav-dropdown-item">Settings</a>
+            <a href="{{ url_for('logout') }}" class="nav-dropdown-item">Logout</a>
+          </div>
+        {% else %}
+          <div class="auth-links">
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Sign Up</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </nav>
@@ -298,8 +409,44 @@
     {% block content %}{% endblock %}
   </div>
 
-  <!-- 4) Bootstrap JS (for the navbar toggle) -->
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container">
+      <p>Have feedback? <a href="{{ url_for('app_feedback') }}">Send it to the developer</a></p>
+      <p><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Hamburger Menu Toggle -->
+  <script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDropdown = document.getElementById('navDropdown');
+
+    if (hamburgerBtn && navDropdown) {
+      // Toggle dropdown on hamburger click
+      hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navDropdown.classList.toggle('show');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!hamburgerBtn.contains(e.target) && !navDropdown.contains(e.target)) {
+          navDropdown.classList.remove('show');
+        }
+      });
+
+      // Close dropdown on ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          navDropdown.classList.remove('show');
+        }
+      });
+    }
+  </script>
 </body>
 </html>
 

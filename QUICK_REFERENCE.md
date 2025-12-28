@@ -1,7 +1,7 @@
 # Quick Reference Guide 📚
 
-**Last Updated:** December 22, 2025
-**Current Sprint:** Sprint 3 Complete ✅
+**Last Updated:** December 27, 2025
+**Current Sprint:** Sprint 1 Complete ✅
 
 ---
 
@@ -26,12 +26,13 @@ http://127.0.0.1:5000
 |------|---------|
 | `run.py` | Application entry point |
 | `app/__init__.py` | App factory, Flask extensions |
-| `app/models.py` | Database models (User, CheckIn) |
+| `app/models.py` | Database models (User, CheckIn, Practice, etc.) |
 | `app/mindfulness_tracker_app.py` | All routes and logic |
+| `app/ai_service.py` | OpenAI & ElevenLabs integration |
 | `app/config.py` | Configuration from .env |
-| `.env` | Environment variables (SECRET_KEY, DATABASE_URL) |
-| `PLANNING.md` | Sprint planning and progress |
-| `CODE_WALKTHROUGH.md` | Detailed code documentation |
+| `.env` | Environment variables (API keys, database) |
+| `PLANNING.md` | Sprint planning and features |
+| `docs/UI_DESIGN.md` | Complete UI design system |
 
 ---
 
@@ -61,9 +62,14 @@ flask db downgrade
 | `/signup` | GET/POST | No | User registration |
 | `/login` | GET/POST | No | User login |
 | `/logout` | GET | Yes | User logout |
-| `/check-in` | GET/POST | Yes | Daily mood check-in |
-| `/already-checked-in` | GET | Yes | Duplicate check-in message |
-| `/practice` | GET | Yes | Practice page (Sprint 3) |
+| `/check-in` | GET/POST | Yes | Daily mood check-in (morning/night) |
+| `/already-checked-in` | GET | Yes | Already checked in message |
+| `/practice` | GET | Yes | AI-generated practice with audio |
+| `/reflect` | GET/POST | Yes | Journal entry with voice input |
+| `/feedback` | GET/POST | Yes | Practice feedback (rating, pacing) |
+| `/thank` | GET | Yes | Thank you page |
+| `/app-feedback` | GET | No | App feedback form (Formspree) |
+| `/thank-you-feedback` | GET | No | App feedback thank you |
 
 ---
 
@@ -73,50 +79,77 @@ flask db downgrade
 - `id`: Integer (PK)
 - `username`: String(20), unique
 - `email`: String(120), unique
-- `password_hash`: String(128)
+- `password_hash`: String(256)
 - `created_at`: DateTime
-- `checkins`: Relationship to CheckIn
 
 ### CheckIn
 - `id`: Integer (PK)
 - `user_id`: Integer (FK to User)
-- `mood`: String(20) - Happy, Calm, Anxious, Sad
+- `mood`: String(20) - Happy, Calm, Anxious, Angry, Sad
 - `body_feeling`: String(200), optional
+- `time_of_day`: String(10) - Morning or Night
+- `created_at`: DateTime
+
+### Practice
+- `id`: Integer (PK)
+- `checkin_id`: Integer (FK to CheckIn)
+- `title`: String(200)
+- `description`: Text (AI-generated guided meditation)
+- `practice_type`: String(50) - breathing, meditation, movement, grounding
+- `journal_prompt`: Text (AI-generated)
+- `audio_file`: String(255) - ElevenLabs TTS filename
+- `created_at`: DateTime
+
+### JournalEntry
+- `id`: Integer (PK)
+- `checkin_id`: Integer (FK to CheckIn)
+- `user_id`: Integer (FK to User)
+- `entry_text`: Text - Response to journal prompt
+- `intention_for_day`: String(500) - Morning only
+- `self_care_today`: String(500) - Night only
+- `goal_for_tomorrow`: String(500) - Night only
+- `created_at`: DateTime
+
+### PracticeFeedback
+- `id`: Integer (PK)
+- `practice_id`: Integer (FK to Practice)
+- `user_id`: Integer (FK to User)
+- `rating`: Integer - 1-5 scale
+- `helped`: Boolean - Did this help?
+- `pacing`: String(20) - Too fast, Just right, Too slow
 - `created_at`: DateTime
 
 ---
 
-## 🎨 UI Components
+## 🎨 UI Design System
 
-**Mood Emojis:**
-- 😊 Happy
-- 😌 Calm
-- 😰 Anxious
-- 😔 Sad
+**Theme:** Dark Sunset
 
-**Color Palette:**
-- Primary: `#C3521A` (burnt orange)
-- Secondary: `#E67E3C` (lighter orange)
-- Neutral: `#6c757d`
+**Colors:**
+- Background: Orange-blue ombre gradient (6 stops)
+- Cards: Solid dark teal (#1e3a45)
+- Primary accent: Sunset peach (#e8a87c)
+- Text: White with varying opacity
 
-**Animations:**
-- Button hover: `translateY(-2px)`
-- Leaf sway: `rotate(-5deg to 5deg)`
-- Meditation float: `translateY(-10px)`
+**Typography:**
+- Font: ui-sans-serif (General Sans-like)
+- Logo: font-weight 500, letter-spacing 4px
+- Body: font-weight 300, letter-spacing 0.5px
 
----
+**Mood Colors:**
+- Happy: #f4d03f (yellow)
+- Calm: #85c1e2 (light blue)
+- Anxious: #e17055 (orange)
+- Angry: #d63031 (red)
+- Sad: #74b9ff (soft blue)
 
-## 📊 Sprint Progress
+**Components:**
+- Navbar: Transparent with dark blue logo
+- Cards: Compact sizing (reduced from previous versions)
+- Buttons: Sunset gradient for primary actions
+- Audio player: SVG icons, vertically aligned
 
-| Sprint | Status | Features |
-|--------|--------|----------|
-| 0 | ✅ Complete | Setup, database, git |
-| 1 | ✅ Complete | Auth system, signup/login |
-| 2 | ✅ Complete | Check-in, mood tracking, UI |
-| 3 | ⏳ Next | AI integration, practices |
-| 4 | 📋 Planned | Journal, feedback |
-| 5 | 📋 Planned | Styling polish |
-| 6 | 📋 Planned | Dashboard, history |
+See [docs/UI_DESIGN.md](docs/UI_DESIGN.md) for complete design system.
 
 ---
 
@@ -125,39 +158,92 @@ flask db downgrade
 ```bash
 FLASK_APP=run.py
 FLASK_ENV=development
-DATABASE_URL=sqlite:///mindfulness_tracker.db
-SECRET_KEY=your-secret-key
-OPENAI_API_KEY=your-api-key  # For Sprint 3
+DATABASE_URL=postgresql://user:pass@host/db  # Production
+DATABASE_URL=sqlite:///mindfulness_tracker.db  # Development
+SECRET_KEY=your-secret-key-here
+
+# API Keys
+OPENAI_API_KEY=sk-...
+ELEVENLABS_API_KEY=...
 ```
 
 ---
 
 ## 🧪 Testing Checklist
 
-**Before Each Commit:**
-- [ ] Test signup flow
-- [ ] Test login/logout
-- [ ] Test check-in (happy path)
-- [ ] Test duplicate check-in validation
-- [ ] Test mobile responsiveness
-- [ ] Check browser console for errors
-- [ ] Verify database updates
+**Core Flows:**
+- [ ] Signup → Login → Check-in (Morning)
+- [ ] Check-in → Practice (audio plays)
+- [ ] Practice → Journal (voice input works)
+- [ ] Journal → Feedback → Thank you
+- [ ] Second check-in same day (Night)
+- [ ] Third check-in attempt (blocked)
+
+**UI Tests:**
+- [ ] Ombre background displays correctly
+- [ ] Navbar is transparent with dark blue logo
+- [ ] Mood grid is centered (5 moods)
+- [ ] Selected mood shows dark blue indicator
+- [ ] Audio player buttons aligned vertically
+- [ ] Footer shows on all pages
+- [ ] Mobile responsive (576px, 768px)
+
+**Feature Tests:**
+- [ ] Time restrictions (morning 3am-1pm, night 1pm-3am)
+- [ ] Already checked in shows correct time message
+- [ ] Practice duration ≥ 1 minute
+- [ ] App feedback redirects to custom thank you page
+
+---
+
+## 📊 Sprint Status
+
+| Sprint | Status | Features |
+|--------|--------|----------|
+| 0 | ✅ Complete | Setup, database, git |
+| 1 | ✅ Complete | Auth, check-in, AI, journal, feedback, UI polish |
+| 2 | 📋 Next | TBD |
+
+---
+
+## 🚀 Features Implemented
+
+**Sprint 1 Complete:**
+- [x] User authentication (signup, login, logout)
+- [x] Twice-daily check-ins (morning & night)
+- [x] 5 moods (Happy, Calm, Anxious, Angry, Sad)
+- [x] Time-based practice restrictions
+- [x] AI-generated practices (OpenAI GPT-3.5)
+- [x] Text-to-speech audio (ElevenLabs)
+- [x] Minimum 1-minute practice duration
+- [x] Journal prompts with voice input
+- [x] Time-specific reflection questions
+- [x] Practice feedback (rating, helpfulness, pacing)
+- [x] App feedback form (Formspree integration)
+- [x] Dark sunset UI theme
+- [x] Compact button card sizing
+- [x] Transparent navbar
+- [x] Mobile responsive design
 
 ---
 
 ## 🐛 Common Issues
 
-### "Login form not working"
-- **Fix:** Restart Flask server (Ctrl+C, then `python run.py`)
+### "Audio not playing"
+- **Fix:** Check `app/static/audio/` directory exists
+- **Fix:** Verify ElevenLabs API key in `.env`
 
-### "Database connection error"
-- **Fix:** Check `.env` has `DATABASE_URL=sqlite:///mindfulness_tracker.db`
+### "Time restriction not working"
+- **Fix:** Check server time matches expected timezone
+- **Fix:** Morning: 3am-1pm, Night: 1pm-3am
 
-### "flask command not found"
-- **Fix:** Run `source venv/bin/activate` first
+### "Formspree redirect failing"
+- **Fix:** Check `_next` parameter in form
+- **Fix:** Verify AJAX submission in app_feedback.html
 
-### "Module not found"
-- **Fix:** Run `pip install -r requirements.txt`
+### "Migration error"
+- **Fix:** Delete `migrations/` folder and `flask db init` again
+- **Fix:** Check database connection in `.env`
 
 ---
 
@@ -171,51 +257,14 @@ OPENAI_API_KEY=your-api-key  # For Sprint 3
 
 **Database:**
 - psycopg2-binary 2.9.10 (PostgreSQL)
-- SQLite (built-in)
+
+**AI/Audio:**
+- openai 1.x
+- elevenlabs 1.x
 
 **Utilities:**
 - python-dotenv
-- Werkzeug (password hashing)
-
----
-
-## 🎯 MVP Features Status
-
-| Feature | Status |
-|---------|--------|
-| User Authentication | ✅ Done |
-| Daily Mood Check-In | ✅ Done |
-| One-Per-Day Validation | ✅ Done |
-| Beautiful UI | ✅ Done |
-| Mobile Responsive | ✅ Done |
-| AI Practices | ⏳ Sprint 3 |
-| Journal Prompts | ⏳ Sprint 3 |
-| Journal Entry | 📋 Sprint 4 |
-| Feedback System | 📋 Sprint 4 |
-| Dashboard | 📋 Sprint 6 |
-
----
-
-## 📖 Documentation
-
-**Read These:**
-- [PLANNING.md](PLANNING.md) - Sprint breakdown
-- [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) - Detailed code docs
-- [SPRINT_3_PREP.md](SPRINT_3_PREP.md) - Next sprint guide
-- [SPRINT_2_SUMMARY.md](SPRINT_2_SUMMARY.md) - What we built
-
----
-
-## 🔗 Useful Links
-
-**Documentation:**
-- Flask: https://flask.palletsprojects.com/
-- SQLAlchemy: https://docs.sqlalchemy.org/
-- Bootstrap: https://getbootstrap.com/docs/5.3/
-
-**Tools:**
-- OpenAI Platform: https://platform.openai.com/
-- Render Dashboard: https://dashboard.render.com/
+- Werkzeug
 
 ---
 
@@ -223,21 +272,10 @@ OPENAI_API_KEY=your-api-key  # For Sprint 3
 
 1. **Always activate venv first:** `source venv/bin/activate`
 2. **Restart Flask after .env changes:** Ctrl+C, then run again
-3. **Check migrations before coding:** `flask db current`
-4. **Test in incognito:** Avoid session caching issues
-5. **Use git branches:** Create feature branches for new work
-6. **Commit often:** Small, focused commits are better
-
----
-
-## 🎓 Learning Resources
-
-**Next Topics to Study:**
-- OpenAI API integration
-- Prompt engineering for AI
-- JSON parsing in Python
-- Error handling best practices
-- Database query optimization
+3. **Test time restrictions:** Mock current_hour in check_in route
+4. **Clear database for testing:** `python3 clear_data.py`
+5. **Check AI costs:** Monitor OpenAI & ElevenLabs usage
+6. **Use git branches:** Create feature branches for new work
 
 ---
 
@@ -255,7 +293,7 @@ flask run
 # Database
 flask db migrate -m "message"
 flask db upgrade
-flask db downgrade
+python3 clear_data.py  # Clear all data except users
 
 # Dependencies
 pip install package-name
@@ -270,4 +308,19 @@ git push origin branch-name
 
 ---
 
-**Happy coding! 🌿**
+## 🔗 Useful Links
+
+**Documentation:**
+- Flask: https://flask.palletsprojects.com/
+- OpenAI: https://platform.openai.com/docs
+- ElevenLabs: https://elevenlabs.io/docs
+- Formspree: https://formspree.io/forms
+
+**Tools:**
+- OpenAI Platform: https://platform.openai.com/
+- ElevenLabs Dashboard: https://elevenlabs.io/
+- Formspree: https://formspree.io/f/mvzorgoz
+
+---
+
+**Happy coding! 🌅**

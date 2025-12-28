@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Thank You{% endblock %}
+
+{% block content %}
+<div class="thank-you-container">
+  <div class="text-center">
+    <!-- Check Mark Icon -->
+    <div class="check-mark-circle mb-4">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="38" stroke="var(--sunset-peach)" stroke-width="4"/>
+        <path d="M25 42L35 52L55 28" stroke="var(--sunset-peach)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Message Card -->
+    <div class="message-card mx-auto mb-5">
+      <h1 class="display-5 mb-3">
+        Thank you for your feedback!
+      </h1>
+
+      <p class="message-text">
+        Your input helps us improve Recalibrate and create a better experience for everyone.
+        We truly appreciate you taking the time to share your thoughts.
+      </p>
+    </div>
+
+    <!-- Action Button -->
+    <div class="button-group">
+      <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+        Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+.thank-you-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-mark-circle {
+  animation: scaleIn 0.6s ease-out;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.message-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+  max-width: 650px;
+}
+
+.message-card h1 {
+  color: var(--text-light);
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.message-text {
+  font-size: 1.15rem;
+  color: var(--text-medium);
+  line-height: 2;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.button-group {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .thank-you-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .message-card {
+    padding: var(--space-xl);
+  }
+
+  .message-card h1 {
+    font-size: 2rem;
+  }
+
+  .message-text {
+    font-size: 1rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .button-group .btn {
+    width: 100%;
+  }
+}
+</style>
+{% endblock %}

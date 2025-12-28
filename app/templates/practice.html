@@ -21,8 +21,15 @@
     {% if practice.audio_file %}
     <div class="audio-player-container mb-4">
       <div class="audio-player">
-        <button id="playPauseBtn" class="play-pause-btn">
-          <span id="playIcon">▶️</span>
+        <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause">
+          <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+          </svg>
+          <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="display: none;">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
+          </svg>
         </button>
         <div class="audio-progress">
           <div class="progress-bar">
@@ -86,8 +93,7 @@
 
 /* Practice Card */
 .practice-card {
-  background: rgba(165, 99, 54, 0.3);
-  backdrop-filter: blur(20px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.3);
   border-radius: var(--radius-xl);
   padding: var(--space-2xl);
@@ -139,8 +145,7 @@
 
 /* Journal Card */
 .journal-card {
-  background: rgba(165, 99, 54, 0.3);
-  backdrop-filter: blur(20px);
+  background: #1e3a45;
   border: 1px solid rgba(232, 168, 124, 0.3);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
@@ -166,38 +171,44 @@
   font-weight: 300;
 }
 
-/* Audio Player - Orange Theme */
+/* Audio Player */
 .audio-player-container {
-  background: rgba(38, 60, 65, 0.3);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(232, 168, 124, 0.2);
-  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(30, 58, 69, 0.8) 0%, rgba(30, 58, 69, 0.95) 100%);
+  border: 1px solid rgba(232, 168, 124, 0.25);
+  border-radius: var(--radius-xl);
   padding: var(--space-xl);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(232, 168, 124, 0.1);
 }
 
 .audio-player {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-lg);
 }
 
 .play-pause-btn {
-  background: linear-gradient(135deg, var(--primary-warm) 0%, var(--primary-warm-hover) 100%);
+  background: linear-gradient(135deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
   border: none;
   border-radius: var(--radius-full);
-  width: 60px;
-  height: 60px;
-  font-size: 1.5rem;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: var(--transition-normal);
+  transition: var(--transition-smooth);
   flex-shrink: 0;
-  box-shadow: var(--shadow-primary);
+  box-shadow: 0 4px 12px rgba(232, 168, 124, 0.3);
+  color: var(--bg-primary);
 }
 
 .play-pause-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(183, 105, 53, 0.4);
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(232, 168, 124, 0.4);
+}
+
+.play-pause-btn:active {
+  transform: scale(0.98);
 }
 
 .audio-progress {
@@ -205,29 +216,32 @@
 }
 
 .progress-bar {
-  background: rgba(147, 94, 56, 0.2);
-  height: 6px;
-  border-radius: 3px;
+  background: rgba(232, 168, 124, 0.15);
+  height: 8px;
+  border-radius: var(--radius-full);
   cursor: pointer;
   margin-bottom: var(--space-sm);
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(232, 168, 124, 0.2);
 }
 
 .progress-fill {
-  background: linear-gradient(90deg, var(--primary-warm) 0%, var(--primary-warm-hover) 100%);
+  background: linear-gradient(90deg, var(--sunset-peach) 0%, var(--sunset-coral) 100%);
   height: 100%;
   width: 0%;
   transition: width 0.1s linear;
-  border-radius: 3px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 8px rgba(232, 168, 124, 0.3);
 }
 
 .time-display {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--text-medium);
-  font-weight: 500;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
 /* Responsive */
@@ -284,13 +298,17 @@ if (audio) {
   });
 
   // Play/Pause toggle
+  const pauseIcon = document.getElementById('pauseIcon');
+
   playPauseBtn.addEventListener('click', function() {
     if (audio.paused) {
       audio.play();
-      playIcon.textContent = '⏸️';
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
     } else {
       audio.pause();
-      playIcon.textContent = '▶️';
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
     }
   });
 
@@ -310,7 +328,8 @@ if (audio) {
 
   // Reset icon when audio ends
   audio.addEventListener('ended', function() {
-    playIcon.textContent = '▶️';
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
     progressFill.style.width = '0%';
   });
 }

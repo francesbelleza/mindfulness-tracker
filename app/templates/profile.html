@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 mb-3">Your Profile</h1>
+    <p class="subtitle">Manage your account settings</p>
+  </div>
+
+  <!-- Profile Information Card -->
+  <div class="profile-card mx-auto">
+    <div class="profile-section mb-4">
+      <h3 class="section-title mb-3">Account Information</h3>
+
+      <div class="info-item mb-3">
+        <label class="info-label">Username</label>
+        <p class="info-value">{{ current_user.username }}</p>
+      </div>
+
+      <div class="info-item mb-3">
+        <label class="info-label">Email</label>
+        <p class="info-value">{{ current_user.email }}</p>
+      </div>
+
+      <div class="info-item">
+        <label class="info-label">Member Since</label>
+        <p class="info-value">{{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Edit Profile Section (Placeholder) -->
+    <div class="profile-section mb-4">
+      <h3 class="section-title mb-3">Edit Profile</h3>
+      <p class="coming-soon-text">Profile editing coming soon</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Delete Account Section -->
+    <div class="profile-section">
+      <h3 class="section-title mb-3 text-danger-custom">Delete Account</h3>
+      <p class="warning-text mb-3">
+        This action is permanent. All your data will be removed from our database.
+      </p>
+      <button class="btn btn-danger" disabled>Delete My Account</button>
+      <p class="coming-soon-text mt-2">Account deletion coming soon</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.profile-container {
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.profile-container h1 {
+  color: var(--text-light);
+  font-weight: 200;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.profile-card {
+  background: #1e3a45;
+  border: 1px solid rgba(232, 168, 124, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card), var(--glow-subtle);
+  max-width: 650px;
+}
+
+.section-title {
+  color: var(--text-light);
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  font-size: 1.3rem;
+}
+
+.info-item {
+  margin-bottom: var(--space-md);
+}
+
+.info-label {
+  display: block;
+  color: var(--text-subtle);
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(232, 168, 124, 0.2);
+  margin: var(--space-xl) 0;
+}
+
+.coming-soon-text {
+  color: var(--text-subtle);
+  font-size: 0.95rem;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.text-danger-custom {
+  color: rgba(220, 53, 69, 0.9) !important;
+}
+
+.warning-text {
+  color: var(--text-medium);
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.btn-danger {
+  background: rgba(220, 53, 69, 0.8);
+  border: none;
+  color: var(--text-light);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: var(--transition-smooth);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(220, 53, 69, 1);
+  transform: translateY(-2px);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .profile-card {
+    padding: var(--space-xl);
+  }
+}
+</style>
+{% endblock %}

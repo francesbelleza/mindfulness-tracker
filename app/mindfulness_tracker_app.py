@@ -4,7 +4,7 @@
 
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from app.models import User, CheckIn, Practice, JournalEntry, PracticeFeedback
 from app import db
 from app.ai_service import generate_practice_and_prompt, get_fallback_content, generate_audio
@@ -72,6 +72,22 @@ def initial_routes(app):
             mood = request.form.get('mood')
             body_feeling = request.form.get('body_feeling', '').strip()
 
+            # Time-based validation: Check if selected time matches current time window
+            current_hour = datetime.now().hour
+
+            # Morning window: 3am - 1pm (03:00 - 12:59)
+            # Night window: 1pm - 3am (13:00 - 02:59)
+            is_morning_window = 3 <= current_hour < 13
+            is_night_window = current_hour >= 13 or current_hour < 3
+
+            if time_of_day == 'Morning' and not is_morning_window:
+                flash('Morning practices are only available between 3am and 1pm.', 'warning')
+                return render_template('check_in.html')
+
+            if time_of_day == 'Night' and not is_night_window:
+                flash('Evening practices are only available between 1pm and 3am.', 'warning')
+                return render_template('check_in.html')
+
             # Check if user already has a check-in for this time of day
             if time_of_day == 'Morning' and morning_checkin:
                 flash('You\'ve already completed your morning check-in today.', 'info')
@@ -98,7 +114,15 @@ def initial_routes(app):
     @app.route('/already-checked-in')
     @login_required
     def already_checked_in():
-        return render_template('already_checked_in.html')
+        # Get the most recent check-in from today to determine time of day
+        today = date.today()
+        latest_checkin = CheckIn.query.filter(
+            CheckIn.user_id == current_user.id,
+            db.func.date(CheckIn.created_at) == today
+        ).order_by(CheckIn.created_at.desc()).first()
+
+        time_of_day = latest_checkin.time_of_day if latest_checkin else None
+        return render_template('already_checked_in.html', time_of_day=time_of_day)
 
     @app.route('/practice')
     @login_required
@@ -303,6 +327,77 @@ def initial_routes(app):
 
         return render_template('thank.html', time_of_day=time_of_day)
 
+    @app.route('/app-feedback')
+    def app_feedback():
+        return render_template('app_feedback.html')
+
+    @app.route('/thank-you-feedback')
+    def thank_you_feedback():
+        return render_template('thank_you_feedback.html')
+
+    @app.route('/reflection-space')
+    @login_required
+    def reflection_space():
+        # Get all user's journal entries with check-in data
+        journal_entries = JournalEntry.query.filter_by(user_id=current_user.id)\
+            .join(CheckIn)\
+            .order_by(CheckIn.created_at.desc())\
+            .all()
+
+        # Calculate check-in streak
+        streak = calculate_check_in_streak(current_user.id)
+
+        # Get current week's check-ins for mood visualization
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())
+        week_checkins = CheckIn.query.filter(
+            CheckIn.user_id == current_user.id,
+            CheckIn.created_at >= week_start
+        ).order_by(CheckIn.created_at.asc()).all()
+
+        return render_template('reflection_space.html',
+                               journal_entries=journal_entries,
+                               streak=streak,
+                               week_checkins=week_checkins)
+
+    @app.route('/profile')
+    @login_required
+    def profile():
+        return render_template('profile.html')
+
+    @app.route('/settings')
+    @login_required
+    def settings():
+        return render_template('settings.html')
+
+    @app.route('/privacy-summary')
+    def privacy_summary():
+        return render_template('privacy_summary.html')
+
+    @app.route('/privacy-policy')
+    def privacy_policy():
+        return render_template('privacy_policy.html')
+
     @app.route('/')
     def index():
         return render_template('index.html')
+
+def calculate_check_in_streak(user_id):
+    """Calculate consecutive days with at least one check-in"""
+    today = date.today()
+    streak = 0
+    current_date = today
+
+    while True:
+        checkin = CheckIn.query.filter(
+            CheckIn.user_id == user_id,
+            db.func.date(CheckIn.created_at) == current_date
+        ).first()
+
+        if checkin:
+            streak += 1
+            current_date = current_date - timedelta(days=1)
+        else:
+            break
+
+    return streak
