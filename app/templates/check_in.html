@@ -51,6 +51,13 @@
           <div class="mood-label">Calm</div>
         </label>
 
+        <!-- Neutral -->
+        <input type="radio" class="btn-check" name="mood" id="mood-neutral" value="Neutral" required>
+        <label class="mood-card" for="mood-neutral">
+          <div class="mood-indicator mood-neutral"></div>
+          <div class="mood-label">Neutral</div>
+        </label>
+
         <!-- Anxious -->
         <input type="radio" class="btn-check" name="mood" id="mood-anxious" value="Anxious" required>
         <label class="mood-card" for="mood-anxious">
@@ -238,6 +245,11 @@
 .mood-calm {
   background: #85c1e2;
   border-color: #85c1e2;
+}
+
+.mood-neutral {
+  background: #95a5a6;
+  border-color: #95a5a6;
 }
 
 .mood-anxious {

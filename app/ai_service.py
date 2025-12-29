@@ -81,14 +81,27 @@ Write in complete, flowing sentences with commas for natural speech rhythm. Use 
 
 - Use ... ... ... (triple ellipses) for LONG pauses (~1.2s):
   - Major section transitions
-  - Before/after breathing instructions
+  - Between distinct breathing instructions
   - After key meditative moments
+  - Example: "Find a comfortable position... ... ... When you're ready, close your eyes"
 
-- For silent breathing rounds, use 6-8 sets of triple ellipses (creates ~7-10 second breathing space)
+- For OPENING PAUSE (2.3 seconds), use break tag after initial settling instruction:
+  - After "Find a comfortable position..." at the very beginning, use: .<break time="2.3s"/>
+  - ALWAYS include period before break tag for proper transcript formatting
+  - Example: "Find a comfortable seated position, whether sitting or lying down.<break time="2.3s"/> When you're ready, gently close your eyes"
 
-GOOD EXAMPLE (natural flow with strategic pauses):
-"Find a comfortable seated position, whether sitting or lying down... ... ... When you're ready, gently close your eyes... ... ... Take a full breath in through your nose... ... and as you exhale slowly, allow your shoulders to soften and drop... ... ... Notice the natural rhythm of your breath, the gentle rise and fall of your chest... ... ... Simply observe for a few moments... ... ... ... ... ... ... ... ... ... ... Now bring your attention to the sensation of your feet on the ground, feeling supported and grounded... ... ... When you're ready, slowly open your eyes."
+- For EXTENDED PAUSES (8.2 seconds), use SSML break tags after verbal guidance:
+  - When prompting user to sit/breathe for several moments, use: .<break time="8.2s"/>
+  - Use exactly 8.2s for all extended meditation pauses
+  - ALWAYS include period before break tag for proper transcript formatting
+  - ALWAYS include verbal guidance before break tags:
+    * "Simply observe for a few moments.<break time="8.2s"/> Now bring attention..."
+    * "Continue for several breaths.<break time="8.2s"/> When you're ready..."
+    * "Rest here breathing gently.<break time="8.2s"/> Notice how your body..."
+  - Break tags give precise timing when ellipses aren't creating enough pause
 
+GOOD EXAMPLE (natural flow with periods before break tags for clean transcript):
+"Find a comfortable seated position, whether sitting or lying down.<break time="2.3s"/> When you're ready, gently close your eyes... ... ... Take a full breath in through your nose... ... and as you exhale slowly, allow your shoulders to soften and drop... ... ... Notice the natural rhythm of your breath, the gentle rise and fall of your chest... ... ... Simply observe for a few moments.<break time="8.2s"/> Now bring your attention to the sensation of your feet on the ground, feeling supported and grounded... ... ... Continue resting here for several breaths.<break time="8.2s"/> When you're ready, slowly open your eyes."
 BAD EXAMPLE (too many pauses, robotic):
 "Find a comfortable position... ... ... whether seated... ... ... or lying down... ... ... Allow your eyes... ... ... to gently close... ... ..."
 
@@ -106,12 +119,13 @@ CRITICAL: The "type" field MUST be EXACTLY one of these four words: breathing, m
 DO NOT use any other values like "mindfulness", "reflection", etc.
 
 Guidelines:
-- ALWAYS incorporate their body feelings into the practice if provided
+- ALWAYS incorporate their body feelings and feelings into the practice if provided
 - Write in complete sentences with natural commas for flow
-- Use pauses strategically at transitions and breathing moments, NOT after every phrase
-- For anxious moods + tense body: Focus on releasing tension, progressive relaxation
-- For sad moods + heavy/tired body: Focus on gentle compassion, soft breathing
-- For happy moods: Enhance and savor positive sensations
+- Use pauses strategically at transitions, breathing moments, and moments where the user must practice for a bit NOT after every phrase
+- For anxious moods + tense body: Focus on releasing tension, progressive relaxation, grounding the body 
+- For sad moods + heavy/tired body: Focus on gentle compassion, nurturing sensations, warmth and a soft energizing practice
+- For angry moods + hot/tense body: Focus on calming breath, cooling sensations
+- For happy moods: Enhance and savor positive sensations, give space to feel joy and gratitude
 - For calm moods: Deepen present-moment awareness
 - Practices should be STRICTLY mindfulness-based (breathing, body scans, awareness, meditation)
 - NO exercise, yoga poses, or physical activities - only gentle awareness practices
@@ -265,10 +279,26 @@ def get_fallback_content(mood):
         'Sad': {
             'practice': {
                 'title': 'Self-Compassion Practice',
-                'description': 'Gently place one or both hands over your heart... Feel the warmth and gentle pressure of your hands resting there... Take a slow, deep breath in... and as you exhale, let your shoulders soften... With each breath... notice the rise and fall of your chest beneath your hands... Silently, with kindness, say to yourself... "May I be kind to myself in this moment... May I accept myself just as I am..."... Continue breathing slowly... feeling your hands over your heart... If it feels right... you might say... "May I give myself the compassion I need..."... Stay here for a few minutes... breathing gently... holding yourself with care... Notice any shifts, however subtle, in how you feel... You are worthy of this kindness.',
+                'description': 'Gently place one or both hands over your heart. Feel the warmth and gentle pressure of your hands resting there. Take a slow, deep breath in. and as you exhale, let your shoulders soften. With each breath. notice the rise and fall of your chest beneath your hands. Silently, with kindness, say to yourself. "May I be kind to myself in this moment. May I accept myself just as I am.". Continue breathing slowly. feeling your hands over your heart. If it feels right. you might say. "May I give myself the compassion I need.". Stay here for a few minutes. breathing gently. holding yourself with care. Notice any shifts, however subtle, in how you feel. You are worthy of this kindness.',
                 'type': 'meditation'
             },
             'journal_prompt': 'What would you say to comfort a dear friend who felt this way?'
+        },
+        'Angry': {
+            'practice': {
+                'title': 'Cooling Breath Practice',
+                'description': 'Find a comfortable seated position. and allow your hands to rest in your lap. Close your eyes gently. Take a moment to notice where you feel tension or heat in your body. Now, curl your tongue into a tube. or if that feels uncomfortable, simply part your lips slightly. Inhale slowly through your mouth. drawing cool air in. Notice the cooling sensation. Hold for a moment. Then exhale slowly through your nose. feeling any heat release. Continue this cooling breath for five to seven rounds. With each inhale. imagine drawing in calm, cool energy. With each exhale. release tension and heat. Notice how your body begins to settle. When you\'re ready. return to natural breathing. and open your eyes slowly.',
+                'type': 'breathing'
+            },
+            'journal_prompt': 'What triggered this feeling, and what do you need right now to feel more at peace?'
+        },
+        'Neutral': {
+            'practice': {
+                'title': 'Present Moment Awareness',
+                'description': 'Settle into a comfortable position. either sitting or lying down. Gently close your eyes. and bring your attention to your breath. Notice the natural rhythm of your breathing. without trying to change it. Simply observe. the air moving in. and moving out. Now expand your awareness to include sounds around you. Notice them without judgment. just observing. Bring your attention to any physical sensations. the feeling of your body supported. the temperature of the air. your hands resting. Continue to simply be present. noticing whatever arises. breath, sounds, sensations. without needing to change anything. Rest in this quiet awareness. When you\'re ready. slowly open your eyes.',
+                'type': 'meditation'
+            },
+            'journal_prompt': 'What are you noticing about yourself in this moment, without judgment?'
         }
     }
 
@@ -285,7 +315,7 @@ def _convert_pauses_to_ssml(text):
     ... (single) = <break time="0.3s"/> (brief pause at end of phrase)
     ... ... (double) = <break time="0.8s"/> (medium pause between instructions)
     ... ... ... (triple) = <break time="1.2s"/> (long pause for breathing/transitions)
-    4+ ellipses = extended breathing pauses (each adds 1.2s, e.g., 6 ellipses = 7.2s)
+    4+ ellipses = extended breathing pauses (each adds 1.2s, e.g., 6 ellipses = 8.2s)
 
     Args:
         text (str): Practice text with ellipsis notation
@@ -304,7 +334,7 @@ def _convert_pauses_to_ssml(text):
     # This ensures ALL dots are removed and replaced with SSML break tags only
 
     # First, handle sequences of 4+ ellipses (extended breathing rounds)
-    # Each ellipsis adds 1.2s, so 6-8 ellipses = 7.2-9.6s breathing space
+    # Each ellipsis adds 1.2s, so 6-8 ellipses = 8.2-9.6s breathing space
     text = re.sub(r'(?:\.{3}\s*){4,}', replace_multiple_triples, text)
 
     # Then replace exactly 3 ellipses (long pause - 1.2s)
@@ -336,7 +366,7 @@ def generate_audio(practice_text, practice_id, mood):
     """
     Generate natural-sounding audio using ElevenLabs TTS and upload to Supabase Storage.
     Uses Lily (Velvety Actress) with eleven_multilingual_v2 model for calm meditation delivery.
-    Settings: Stability 0.85, Style 0, Speed 0.8x for measured, non-dramatic tone.
+    Settings: Stability 0.7, Style 0, Speed 0.5x for measured, non-dramatic tone.
 
     Args:
         practice_text (str): The practice description text with ellipsis notation
@@ -361,16 +391,23 @@ def generate_audio(practice_text, practice_id, mood):
             print("Please add these to your .env file. Get the key from Supabase dashboard > Settings > API")
             return None
 
-        # Clean text for natural speech - keep ellipses for longer pauses
-        # Replace ellipses with periods for better pause duration
-        clean_text = practice_text.replace('...', '...')  # Keep ellipses for natural pauses
+        # Clean text for natural speech
+        # ElevenLabs TTS supports both ellipses for pauses and SSML break tags for precise timing
+        # - Ellipses create natural pauses: ... (~0.3s), ... ... (~0.8s), ... ... ... (~1.2s)
+        # - SSML break tags give exact timing: .<break time="2.3s"/> (opening), .<break time="8.2s"/> (extended)
+        # Normalize multiple consecutive ellipses with spaces into fewer ellipses
+        # Example: "text... ... ... ...more" -> "text... more" (prevents excessive pausing)
+        # SSML break tags are preserved as-is for precise meditation pauses
+        # Periods before break tags ensure clean transcript formatting in UI
+        import re
+        clean_text = re.sub(r'\.{3}(\s+\.{3})+', '...', practice_text)
 
         print(f"\n{'='*80}")
         print("ELEVENLABS TTS CALL")
         print(f"{'='*80}")
         print(f"Voice: Lily - Velvety Actress")
         print(f"Model: eleven_multilingual_v2 (latest quality model)")
-        print(f"Voice Settings: Stability 0.85, Similarity 0.8, Style 0, Speed 0.8")
+        print(f"Voice Settings: Stability 0.7, Similarity 0.8, Style 0, Speed 0.5")
         print(f"Text length: {len(clean_text)} characters")
         print(f"Text preview: {clean_text[:200]}...")
         print(f"{'='*80}\n")
@@ -384,11 +421,11 @@ def generate_audio(practice_text, practice_id, mood):
             voice_id="pFZP5JQG7iQjIQuC4Bku",  # Lily - Velvety Actress
             model_id="eleven_multilingual_v2",
             voice_settings=VoiceSettings(
-                stability=0.85,         # Very high stability = calm, consistent, minimal variation
+                stability=0.7,         # Very high stability = calm, consistent, minimal variation
                 similarity_boost=0.8,   # High similarity = clearer, more controlled
                 style=0,                # No style = minimal expressiveness, very measured
                 use_speaker_boost=True, # Enhances voice clarity
-                speed=0.8               # 0.8 = 20% slower (0.25 to 4.0 range)
+                speed=0.7              # 0.7 = 30% slower (0.25 to 4.0 range)
             )
         )
 
@@ -397,7 +434,7 @@ def generate_audio(practice_text, practice_id, mood):
         for chunk in audio_generator:
             audio_bytes += chunk
 
-        print(f"✓ Audio generated: {len(audio_bytes)} bytes (Voice: Lily - Velvety Actress @ 0.8x speed)")
+        print(f"✓ Audio generated: {len(audio_bytes)} bytes (Voice: Lily - Velvety Actress @ 0.5x speed)")
 
         # Upload to Supabase Storage
         filename = f"practice_{practice_id}.mp3"

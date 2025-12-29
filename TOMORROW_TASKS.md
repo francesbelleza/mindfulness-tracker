@@ -9,7 +9,7 @@
 
 ### 1. ⭐ #1 PRIORITY: Research & Find Better Voice
 [x] DONE --> WENT BACK TO ELEVEN LABS
-[] make sure other features are working just fine before moving to sprint 5
+[x] make sure other features are working just fine before moving to sprint 5
 
 
 ---

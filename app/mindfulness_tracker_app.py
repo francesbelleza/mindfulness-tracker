@@ -55,15 +55,16 @@ def initial_routes(app):
         today = date.today()
         is_testing_account = current_user.email == 'frances@gmail.com'
 
-        # Check if user already has a check-in today (limit to 1 per day)
-        existing_checkin = CheckIn.query.filter(
-            CheckIn.user_id == current_user.id,
-            db.func.date(CheckIn.created_at) == today
-        ).first()
+        # Check if user already has a check-in today (limit to 1 per day) - unless testing account
+        if not is_testing_account:
+            existing_checkin = CheckIn.query.filter(
+                CheckIn.user_id == current_user.id,
+                db.func.date(CheckIn.created_at) == today
+            ).first()
 
-        if existing_checkin and request.method == 'GET':
-            flash('You\'ve already completed your check-in today. Come back tomorrow!', 'info')
-            return redirect(url_for('already_checked_in'))
+            if existing_checkin and request.method == 'GET':
+                flash('You\'ve already completed your check-in today. Come back tomorrow!', 'info')
+                return redirect(url_for('already_checked_in'))
 
         if request.method == 'POST':
             # Check time window (4:30am - 12:00pm) unless testing account
@@ -81,10 +82,15 @@ def initial_routes(app):
                     flash('Check-ins are only available between 4:30am and 12:00pm to help build a consistent morning routine. Please come back during this window.', 'warning')
                     return render_template('check_in.html')
 
-            # Check again for existing check-in (in case of race condition)
-            if existing_checkin:
-                flash('You\'ve already completed your check-in today. Come back tomorrow!', 'info')
-                return redirect(url_for('already_checked_in'))
+                # Check again for existing check-in (in case of race condition)
+                existing_checkin = CheckIn.query.filter(
+                    CheckIn.user_id == current_user.id,
+                    db.func.date(CheckIn.created_at) == today
+                ).first()
+
+                if existing_checkin:
+                    flash('You\'ve already completed your check-in today. Come back tomorrow!', 'info')
+                    return redirect(url_for('already_checked_in'))
 
             mood = request.form.get('mood')
             body_feeling = request.form.get('body_feeling', '').strip()
