@@ -1,7 +1,7 @@
 # Quick Reference Guide 📚
 
 **Last Updated:** December 27, 2025
-**Current Sprint:** Sprint 1 Complete ✅
+**Current Sprint:** Sprints 0-4 Complete ✅ | Sprint 5 In Progress
 
 ---
 
@@ -28,7 +28,7 @@ http://127.0.0.1:5000
 | `app/__init__.py` | App factory, Flask extensions |
 | `app/models.py` | Database models (User, CheckIn, Practice, etc.) |
 | `app/mindfulness_tracker_app.py` | All routes and logic |
-| `app/ai_service.py` | OpenAI & ElevenLabs integration |
+| `app/ai_service.py` | OpenAI & Google Cloud TTS integration |
 | `app/config.py` | Configuration from .env |
 | `.env` | Environment variables (API keys, database) |
 | `PLANNING.md` | Sprint planning and features |
@@ -97,7 +97,7 @@ flask db downgrade
 - `description`: Text (AI-generated guided meditation)
 - `practice_type`: String(50) - breathing, meditation, movement, grounding
 - `journal_prompt`: Text (AI-generated)
-- `audio_file`: String(255) - ElevenLabs TTS filename
+- `audio_file`: String(255) - Google Cloud TTS filename
 - `created_at`: DateTime
 
 ### JournalEntry
@@ -164,7 +164,7 @@ SECRET_KEY=your-secret-key-here
 
 # API Keys
 OPENAI_API_KEY=sk-...
-ELEVENLABS_API_KEY=...
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 ```
 
 ---
@@ -201,8 +201,11 @@ ELEVENLABS_API_KEY=...
 | Sprint | Status | Features |
 |--------|--------|----------|
 | 0 | ✅ Complete | Setup, database, git |
-| 1 | ✅ Complete | Auth, check-in, AI, journal, feedback, UI polish |
-| 2 | 📋 Next | TBD |
+| 1 | ✅ Complete | User authentication |
+| 2 | ✅ Complete | Daily check-in flow |
+| 3 | ✅ Complete | AI practices + natural voice (Google Cloud TTS) |
+| 4 | ✅ Complete | Journal & feedback system + structured data |
+| 5 | 🚧 In Progress | Reflection Space, Profile, Settings, Privacy |
 
 ---
 
@@ -214,7 +217,7 @@ ELEVENLABS_API_KEY=...
 - [x] 5 moods (Happy, Calm, Anxious, Angry, Sad)
 - [x] Time-based practice restrictions
 - [x] AI-generated practices (OpenAI GPT-3.5)
-- [x] Text-to-speech audio (ElevenLabs)
+- [x] Text-to-speech audio (Google Cloud TTS WaveNet)
 - [x] Minimum 1-minute practice duration
 - [x] Journal prompts with voice input
 - [x] Time-specific reflection questions
@@ -231,7 +234,8 @@ ELEVENLABS_API_KEY=...
 
 ### "Audio not playing"
 - **Fix:** Check `app/static/audio/` directory exists
-- **Fix:** Verify ElevenLabs API key in `.env`
+- **Fix:** Verify Google Cloud credentials in `.env`
+- **Fix:** Ensure GOOGLE_APPLICATION_CREDENTIALS path is correct
 
 ### "Time restriction not working"
 - **Fix:** Check server time matches expected timezone
@@ -259,8 +263,8 @@ ELEVENLABS_API_KEY=...
 - psycopg2-binary 2.9.10 (PostgreSQL)
 
 **AI/Audio:**
-- openai 1.x
-- elevenlabs 1.x
+- openai 2.x
+- google-cloud-texttospeech 2.17.2
 
 **Utilities:**
 - python-dotenv
@@ -274,8 +278,9 @@ ELEVENLABS_API_KEY=...
 2. **Restart Flask after .env changes:** Ctrl+C, then run again
 3. **Test time restrictions:** Mock current_hour in check_in route
 4. **Clear database for testing:** `python3 clear_data.py`
-5. **Check AI costs:** Monitor OpenAI & ElevenLabs usage
-6. **Use git branches:** Create feature branches for new work
+5. **Check AI costs:** Monitor OpenAI & Google Cloud TTS usage
+6. **Google Cloud setup:** See `docs/GOOGLE_CLOUD_SETUP.md` for TTS setup
+7. **Use git branches:** Create feature branches for new work
 
 ---
 
@@ -313,12 +318,12 @@ git push origin branch-name
 **Documentation:**
 - Flask: https://flask.palletsprojects.com/
 - OpenAI: https://platform.openai.com/docs
-- ElevenLabs: https://elevenlabs.io/docs
+- Google Cloud TTS: https://cloud.google.com/text-to-speech/docs
 - Formspree: https://formspree.io/forms
 
 **Tools:**
 - OpenAI Platform: https://platform.openai.com/
-- ElevenLabs Dashboard: https://elevenlabs.io/
+- Google Cloud Console: https://console.cloud.google.com/
 - Formspree: https://formspree.io/f/mvzorgoz
 
 ---

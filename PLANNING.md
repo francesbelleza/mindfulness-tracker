@@ -69,9 +69,9 @@ and intentional flow.
 
 **AI/nlp**
 - OpenAI API (GPT-3.5-turbo)
-- ElevenLabs Text-to-Speech API (eleven_multilingual_v2)
+- Google Cloud Text-to-Speech API (WaveNet)
 - Custom prompt engineering with mood-based practice generation
-- Natural voice meditation narration with pause optimization
+- Natural voice meditation narration with neural voices and pause optimization
 - Fallback content system for API failures
 
 ---
@@ -124,11 +124,11 @@ and intentional flow.
   - [x] Install `openai` Python package
   - [x] Create AI service module for API calls
   - [x] Design meditation-style prompt with pause notation
-- [x] Set up ElevenLabs TTS integration
-  - [x] Add ElevenLabs API key to `.env`
-  - [x] Install `elevenlabs` Python package
-  - [x] Test and select optimal voice (Lily - Velvety Actress)
-  - [x] Optimize voice settings (stability, speed, similarity)
+- [x] Set up Google Cloud TTS integration
+  - [x] Add Google Cloud credentials to `.env`
+  - [x] Install `google-cloud-texttospeech` Python package
+  - [x] Test and select optimal voice (en-US-Wavenet-F)
+  - [x] Optimize voice settings (speaking rate, pitch)
 - [x] Create database models:
   - [x] `Practice` model (exercise suggestions + audio file)
   - [x] `JournalPrompt` model (reflection prompts)
@@ -137,7 +137,7 @@ and intentional flow.
   - [x] Fetch user's latest check-in (mood + body feeling)
   - [x] Call OpenAI API with mood-based prompt
   - [x] Parse AI response to extract practice + journal prompt
-  - [x] Generate natural AI voice audio via ElevenLabs
+  - [x] Generate natural AI voice audio via Google Cloud TTS
   - [x] Store practice, prompt, and audio filename in database
   - [x] Display on practice page
 - [x] Enhance `/practice` template:
@@ -156,9 +156,10 @@ and intentional flow.
   - [x] Add fallback content for each mood if API fails
 - [x] Voice optimization:
   - [x] Test OpenAI TTS (rejected - robotic)
-  - [x] Test ElevenLabs with multiple voices
-  - [x] Optimize for meditation pacing (0.85x speed)
-  - [x] Tune stability and similarity settings
+  - [x] Test ElevenLabs (replaced due to cost)
+  - [x] Migrate to Google Cloud TTS WaveNet
+  - [x] Optimize for meditation pacing (0.85x speaking rate)
+  - [x] Select calm female voice (en-US-Wavenet-F)
 
 ---
 

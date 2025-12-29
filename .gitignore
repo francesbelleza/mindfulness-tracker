@@ -6,5 +6,8 @@ instance/
 *.sqlite3
 venv/
 .DS_Store
+google-credentials.json
 
 __pycache__/
+
+mindfulness-tracker-482601-3c4076694d95.json

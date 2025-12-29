@@ -53,60 +53,53 @@ def initial_routes(app):
     @login_required
     def check_in():
         today = date.today()
+        is_testing_account = current_user.email == 'frances@gmail.com'
 
-        # Check for existing morning and night check-ins
-        morning_checkin = CheckIn.query.filter(
+        # Check if user already has a check-in today (limit to 1 per day)
+        existing_checkin = CheckIn.query.filter(
             CheckIn.user_id == current_user.id,
-            db.func.date(CheckIn.created_at) == today,
-            CheckIn.time_of_day == 'Morning'
+            db.func.date(CheckIn.created_at) == today
         ).first()
 
-        night_checkin = CheckIn.query.filter(
-            CheckIn.user_id == current_user.id,
-            db.func.date(CheckIn.created_at) == today,
-            CheckIn.time_of_day == 'Night'
-        ).first()
+        if existing_checkin and request.method == 'GET':
+            flash('You\'ve already completed your check-in today. Come back tomorrow!', 'info')
+            return redirect(url_for('already_checked_in'))
 
         if request.method == 'POST':
-            time_of_day = request.form.get('time_of_day')
+            # Check time window (4:30am - 12:00pm) unless testing account
+            if not is_testing_account:
+                current_time = datetime.now()
+                current_hour = current_time.hour
+                current_minute = current_time.minute
+
+                # Convert to minutes since midnight for easier comparison
+                current_minutes = current_hour * 60 + current_minute
+                window_start = 4 * 60 + 30  # 4:30am = 270 minutes
+                window_end = 12 * 60  # 12:00pm = 720 minutes
+
+                if not (window_start <= current_minutes < window_end):
+                    flash('Check-ins are only available between 4:30am and 12:00pm to help build a consistent morning routine. Please come back during this window.', 'warning')
+                    return render_template('check_in.html')
+
+            # Check again for existing check-in (in case of race condition)
+            if existing_checkin:
+                flash('You\'ve already completed your check-in today. Come back tomorrow!', 'info')
+                return redirect(url_for('already_checked_in'))
+
             mood = request.form.get('mood')
             body_feeling = request.form.get('body_feeling', '').strip()
 
-            # Time-based validation: Check if selected time matches current time window
-            current_hour = datetime.now().hour
-
-            # Morning window: 3am - 1pm (03:00 - 12:59)
-            # Night window: 1pm - 3am (13:00 - 02:59)
-            is_morning_window = 3 <= current_hour < 13
-            is_night_window = current_hour >= 13 or current_hour < 3
-
-            if time_of_day == 'Morning' and not is_morning_window:
-                flash('Morning practices are only available between 3am and 1pm.', 'warning')
-                return render_template('check_in.html')
-
-            if time_of_day == 'Night' and not is_night_window:
-                flash('Evening practices are only available between 1pm and 3am.', 'warning')
-                return render_template('check_in.html')
-
-            # Check if user already has a check-in for this time of day
-            if time_of_day == 'Morning' and morning_checkin:
-                flash('You\'ve already completed your morning check-in today.', 'info')
-                return redirect(url_for('already_checked_in'))
-            if time_of_day == 'Night' and night_checkin:
-                flash('You\'ve already completed your night check-in today.', 'info')
-                return redirect(url_for('already_checked_in'))
-
-            # Create new check-in
+            # Create new check-in (set time_of_day to "Morning" for backwards compatibility)
             checkin = CheckIn(
                 user_id=current_user.id,
                 mood=mood,
                 body_feeling=body_feeling if body_feeling else None,
-                time_of_day=time_of_day
+                time_of_day='Morning'  # Default to Morning since we only allow one check-in per day
             )
             db.session.add(checkin)
             db.session.commit()
 
-            flash(f'{time_of_day} check-in saved! You\'re feeling {mood.lower()}.', 'success')
+            flash(f'Check-in saved! You\'re feeling {mood.lower()}.', 'success')
             return redirect(url_for('practice'))
 
         return render_template('check_in.html')

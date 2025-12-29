@@ -1,16 +1,19 @@
 import os
 import json
+import re
 from pathlib import Path
 from openai import OpenAI
-from elevenlabs.client import ElevenLabs
-from elevenlabs import save
+from supabase import create_client, Client
+
+# ElevenLabs TTS
+from elevenlabs import ElevenLabs, VoiceSettings
 
 def generate_practice_and_prompt(mood, body_feeling=None, time_of_day=None):
     """
     Generate personalized mindfulness practice and journal prompt using OpenAI.
 
     Args:
-        mood (str): User's current mood (Happy, Calm, Anxious, Sad)
+        mood (str): User's current mood (Happy, Calm, Anxious, Sad, Angry)
         body_feeling (str, optional): User's body sensations
         time_of_day (str, optional): When checking in (Morning or Night)
 
@@ -23,9 +26,17 @@ def generate_practice_and_prompt(mood, body_feeling=None, time_of_day=None):
     api_key = os.getenv('OPENAI_API_KEY')
     if not api_key:
         print("ERROR: OPENAI_API_KEY not found in environment variables")
+        print("Please check your .env file")
         return None
 
-    client = OpenAI(api_key=api_key)
+    print(f"OpenAI API Key found: {api_key[:20]}...{api_key[-4:]}")  # Show partial key for debugging
+
+    try:
+        client = OpenAI(api_key=api_key)
+        print("✓ OpenAI client initialized successfully")
+    except Exception as e:
+        print(f"ERROR: Failed to initialize OpenAI client: {e}")
+        return None
 
     # Build the user message with mood, body feeling, and time of day
     user_message = f"User's mood: {mood}"
@@ -36,10 +47,12 @@ def generate_practice_and_prompt(mood, body_feeling=None, time_of_day=None):
 
     # System prompt for the AI
     system_prompt = """You are a compassionate mindfulness meditation teacher. Based on the user's mood, body sensations, and time of day, create:
-1. A guided mindfulness practice (MINIMUM 1 minute when spoken aloud, ideally 2-4 minutes) with clear, spoken-style instructions
+1. A guided mindfulness practice (1 minute when spoken aloud, occasionally 1.5 minutes if absolutely necessary) with clear, spoken-style instructions
 2. A thoughtful journal prompt for reflection
 
-IMPORTANT: Write the practice description as if you're speaking directly to the user in a calm, guiding voice. Use "you" language and present tense. Make it sound like guided meditation audio that will be read aloud with natural pauses.
+CRITICAL LENGTH REQUIREMENT: Keep meditations at EXACTLY 1 minute (80-120 words). Only extend to 1.5 minutes (up to 175 words) if the user's mood/situation absolutely requires more guidance. Default to 1 minute.
+
+IMPORTANT: Write the practice description as if you're speaking directly to the user in a calm, guiding voice. Use "you" language and present tense. Write in complete, natural sentences with commas for flow.
 
 NOTE: The user will also receive additional structured questions based on time of day:
 - Morning: "What is your intention for the day?"
@@ -51,19 +64,39 @@ TIME OF DAY GUIDANCE:
 - NIGHT practices: Create calming, reflective practices to wind down. Focus on releasing the day's tension, restorative breathing, body relaxation, or gentle self-compassion. Help them prepare for restful sleep and let go of the day.
 - If no time specified, create a balanced practice suitable for any time.
 
-CRITICAL PAUSE INSTRUCTIONS - VERY IMPORTANT:
-- Use THREE ellipses (...) for long 3-5 second meditative pauses for breathing (e.g., "Close your eyes... ... ... Take a deep breath")
-- Use TWO ellipses (... ...) for medium 2-3 second pauses (e.g., "Notice your breath... ... Feel the rise and fall")
-- Use ONE ellipsis (...) for brief 1-2 second pauses (e.g., "Breathe in... and breathe out")
-- Use commas ONLY within the same sentence, not for pauses between instructions
-- Add MANY pauses - meditation should feel spacious, not rushed
-- Example: "Find a comfortable position... ... ... When you're ready... ... gently close your eyes... ... ... Take a deep, slow breath in... ... ... and exhale fully... ... ... Notice the sensation of your breath... ... ... Continue breathing naturally... ... ..."
+CRITICAL PAUSE INSTRUCTIONS - USE PAUSES STRATEGICALLY:
+Write in complete, flowing sentences with commas for natural speech rhythm. Use ellipses ONLY for intentional meditative pauses.
+
+- Use COMMAS for natural speech flow (~0.2s pause, handled automatically):
+  - "Find a comfortable position, either seated or lying down"
+  - "Take a deep breath in, and slowly exhale"
+
+- Use ... (single ellipsis) for BRIEF pauses (~0.3s):
+  - End of complete phrases before moving to next instruction
+  - After breathing cues: "exhale through your mouth... feeling your shoulders relax"
+
+- Use ... ... (double ellipses) for MEDIUM pauses (~0.8s):
+  - Between distinct instructions
+  - Natural meditation pacing: "Notice the rhythm of your breath... ... Now bring attention to your body"
+
+- Use ... ... ... (triple ellipses) for LONG pauses (~1.2s):
+  - Major section transitions
+  - Before/after breathing instructions
+  - After key meditative moments
+
+- For silent breathing rounds, use 6-8 sets of triple ellipses (creates ~7-10 second breathing space)
+
+GOOD EXAMPLE (natural flow with strategic pauses):
+"Find a comfortable seated position, whether sitting or lying down... ... ... When you're ready, gently close your eyes... ... ... Take a full breath in through your nose... ... and as you exhale slowly, allow your shoulders to soften and drop... ... ... Notice the natural rhythm of your breath, the gentle rise and fall of your chest... ... ... Simply observe for a few moments... ... ... ... ... ... ... ... ... ... ... Now bring your attention to the sensation of your feet on the ground, feeling supported and grounded... ... ... When you're ready, slowly open your eyes."
+
+BAD EXAMPLE (too many pauses, robotic):
+"Find a comfortable position... ... ... whether seated... ... ... or lying down... ... ... Allow your eyes... ... ... to gently close... ... ..."
 
 Respond ONLY with valid JSON in this exact format:
 {
   "practice": {
     "title": "Practice name (concise, under 50 characters)",
-    "description": "Voice-guided instructions with natural pauses using ellipses and punctuation (150-250 words, very slow meditative pacing)",
+    "description": "Voice-guided instructions with natural sentence flow and strategic pauses (80-120 words for 1 minute, up to 175 words only if absolutely necessary)",
     "type": "breathing|meditation|movement|grounding"
   },
   "journal_prompt": "A thoughtful question or reflection prompt (1-2 sentences)"
@@ -74,31 +107,59 @@ DO NOT use any other values like "mindfulness", "reflection", etc.
 
 Guidelines:
 - ALWAYS incorporate their body feelings into the practice if provided
-- Use calm, soothing language with strategic pauses throughout
-- Example: "Gently close your eyes... Notice the sensation of..." NOT "1. Close eyes 2. Notice..."
-- For anxious moods + tense body: Focus on releasing tension, progressive relaxation with longer pauses
-- For sad moods + heavy/tired body: Focus on gentle compassion, soft breathing with nurturing pauses
-- For happy moods: Enhance and savor positive sensations with appreciative pauses
-- For calm moods: Deepen present-moment awareness with spacious pauses
+- Write in complete sentences with natural commas for flow
+- Use pauses strategically at transitions and breathing moments, NOT after every phrase
+- For anxious moods + tense body: Focus on releasing tension, progressive relaxation
+- For sad moods + heavy/tired body: Focus on gentle compassion, soft breathing
+- For happy moods: Enhance and savor positive sensations
+- For calm moods: Deepen present-moment awareness
 - Practices should be STRICTLY mindfulness-based (breathing, body scans, awareness, meditation)
 - NO exercise, yoga poses, or physical activities - only gentle awareness practices
 - Keep it simple and accessible (seated or lying down)
-- Use ellipses generously to create meditative breathing space"""
+- Target 1 minute spoken aloud (80-120 words), extend to 1.5 minutes (up to 175 words) only if absolutely necessary"""
 
     try:
-        # Call OpenAI API
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ],
-            max_tokens=400,
-            temperature=0.7
-        )
+        # Try GPT-4o first (optimized, high quality meditation scripts)
+        try:
+            print("Attempting GPT-4o API call...")
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message}
+                ],
+                max_tokens=600,  # Increased for longer, more detailed practices
+                temperature=0.7
+            )
+            print("✓ GPT-4o API call successful")
+        except Exception as gpt4_error:
+            # If GPT-4o fails (access denied, not available, etc.), fall back to GPT-3.5-turbo
+            print(f"GPT-4o failed: {gpt4_error}")
+            print("Falling back to GPT-3.5-turbo...")
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message}
+                ],
+                max_tokens=600,
+                temperature=0.7
+            )
+            print("✓ GPT-3.5-turbo API call successful")
 
         # Parse the response
         ai_response = response.choices[0].message.content.strip()
+        print(f"AI Response received: {ai_response[:100]}...")  # Print first 100 chars
+
+        # Strip markdown code blocks if present (GPT-4 sometimes wraps JSON in ```json...```)
+        if ai_response.startswith('```'):
+            # Remove opening ```json or ```
+            ai_response = ai_response.split('\n', 1)[1] if '\n' in ai_response else ai_response[3:]
+            # Remove closing ```
+            if ai_response.endswith('```'):
+                ai_response = ai_response.rsplit('```', 1)[0]
+            ai_response = ai_response.strip()
+            print("Stripped markdown code blocks from response")
 
         # Parse JSON response
         result = json.loads(ai_response)
@@ -106,18 +167,22 @@ Guidelines:
         # Validate response structure
         if not _validate_response(result):
             print("ERROR: AI response validation failed")
-            print(f"Response: {ai_response}")
+            print(f"Full response: {ai_response}")
             return None
 
+        print("✓ AI response validated successfully")
         return result
 
     except json.JSONDecodeError as e:
         print(f"ERROR: Failed to parse AI response as JSON: {e}")
-        print(f"Response: {ai_response}")
+        print(f"Raw response: {ai_response if 'ai_response' in locals() else 'No response'}")
         return None
 
     except Exception as e:
-        print(f"ERROR: OpenAI API call failed: {e}")
+        print(f"ERROR: OpenAI API call failed completely: {e}")
+        print(f"Error type: {type(e).__name__}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
         return None
 
 
@@ -211,60 +276,159 @@ def get_fallback_content(mood):
     return fallback_map.get(mood, fallback_map['Calm'])
 
 
-def generate_audio(practice_text, practice_id, mood):
+def _convert_pauses_to_ssml(text):
     """
-    Generate natural-sounding audio for a practice using ElevenLabs TTS.
-    Uses a single calm, meditative voice for all moods.
+    Convert ellipsis pause notation to SSML break tags for natural meditation pacing.
+    Ensures ALL literal dots are removed to prevent model from interpreting them as trailing off.
+
+    Comma = natural speech pause (~0.2s, handled by TTS prosody)
+    ... (single) = <break time="0.3s"/> (brief pause at end of phrase)
+    ... ... (double) = <break time="0.8s"/> (medium pause between instructions)
+    ... ... ... (triple) = <break time="1.2s"/> (long pause for breathing/transitions)
+    4+ ellipses = extended breathing pauses (each adds 1.2s, e.g., 6 ellipses = 7.2s)
 
     Args:
-        practice_text (str): The practice description text
-        practice_id (int): The practice ID for filename
-        mood (str): User's mood (not used for voice selection, kept for compatibility)
+        text (str): Practice text with ellipsis notation
 
     Returns:
-        str: Filename of the generated audio, or None if failed
+        str: Text with SSML break tags only (no literal dots remaining)
     """
-    api_key = os.getenv('ELEVENLABS_API_KEY')
-    if not api_key:
-        print("ERROR: ELEVENLABS_API_KEY not found")
-        return None
+    # Count consecutive triple ellipses for extended breathing pauses
+    # Each triple = 1.2s, so multiple triples create longer pauses for breathing rounds
+    def replace_multiple_triples(match):
+        count = match.group(0).count('...')
+        total_time = count * 1.2  # 1.2 seconds per triple
+        return f'<break time="{total_time}s"/>'
 
-    # Use single meditative voice for all moods
-    # Lily: Velvety Actress - calm, soothing, perfect for meditation
-    voice_id = 'pFZP5JQG7iQjIQuC4Bku'  # Lily
-    voice_name = 'Lily'
+    # Replace patterns in order from longest to shortest to avoid partial matches
+    # This ensures ALL dots are removed and replaced with SSML break tags only
 
+    # First, handle sequences of 4+ ellipses (extended breathing rounds)
+    # Each ellipsis adds 1.2s, so 6-8 ellipses = 7.2-9.6s breathing space
+    text = re.sub(r'(?:\.{3}\s*){4,}', replace_multiple_triples, text)
+
+    # Then replace exactly 3 ellipses (long pause - 1.2s)
+    text = re.sub(r'\.{3}\s*\.{3}\s*\.{3}(?!\s*\.{3})', '<break time="1.2s"/>', text)
+
+    # Replace exactly 2 ellipses (medium pause - 0.8s)
+    text = re.sub(r'\.{3}\s*\.{3}(?!\s*\.{3})', '<break time="0.8s"/>', text)
+
+    # Replace single ellipses (brief pause - 0.3s)
+    text = re.sub(r'\.{3}', '<break time="0.3s"/>', text)
+
+    # CRITICAL: Clean up any remaining problematic patterns that could cause trailing off
+    # Remove any stray dots (4+ consecutive dots that aren't part of ellipses)
+    text = re.sub(r'\.{4,}', '', text)
+
+    # Remove spaced dots like ". . ." or ". . . ." that could sneak through
+    text = re.sub(r'\.\s+\.\s+\.', '', text)
+
+    # Remove any trailing dots at end of sentences (but keep normal periods)
+    text = re.sub(r'\.{2,}\s*$', '.', text, flags=re.MULTILINE)
+
+    # Final safety: ensure no sequences of multiple dots remain anywhere
+    text = re.sub(r'\.{2,}', '.', text)
+
+    return text
+
+
+def generate_audio(practice_text, practice_id, mood):
+    """
+    Generate natural-sounding audio using ElevenLabs TTS and upload to Supabase Storage.
+    Uses Lily (Velvety Actress voice) with slower delivery (0.8x speed) for meditation.
+
+    Args:
+        practice_text (str): The practice description text with ellipsis notation
+        practice_id (int): The practice ID for filename
+        mood (str): User's mood (for logging)
+
+    Returns:
+        str: Public URL of the audio file on Supabase, or None if failed
+    """
     try:
-        # Create audio directory if it doesn't exist
-        audio_dir = Path("app/static/audio")
-        audio_dir.mkdir(parents=True, exist_ok=True)
+        # Get ElevenLabs API key
+        api_key = os.getenv('ELEVENLABS_API_KEY')
+        if not api_key:
+            print("ERROR: ELEVENLABS_API_KEY not found in environment variables")
+            return None
 
-        # Generate audio filename
-        audio_filename = f"practice_{practice_id}.mp3"
-        audio_path = audio_dir / audio_filename
+        # Get Supabase credentials
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY')
+        if not supabase_url or not supabase_key:
+            print("ERROR: SUPABASE_URL or SUPABASE_KEY not found in environment variables")
+            print("Please add these to your .env file. Get the key from Supabase dashboard > Settings > API")
+            return None
 
-        # Initialize ElevenLabs client
+        # Clean text for natural speech - keep ellipses for longer pauses
+        # Replace ellipses with periods for better pause duration
+        clean_text = practice_text.replace('...', '...')  # Keep ellipses for natural pauses
+
+        print(f"\n{'='*80}")
+        print("ELEVENLABS TTS CALL")
+        print(f"{'='*80}")
+        print(f"Voice: Lily - Velvety Actress")
+        print(f"Model: eleven_multilingual_v2 (latest quality model)")
+        print(f"Voice Settings: Stability 0.85, Similarity 0.8, Style 0, Speed 0.8")
+        print(f"Text length: {len(clean_text)} characters")
+        print(f"Text preview: {clean_text[:200]}...")
+        print(f"{'='*80}\n")
+
+        # Initialize ElevenLabs client and generate audio with Lily voice
         client = ElevenLabs(api_key=api_key)
 
-        # Generate audio with ElevenLabs TTS (returns a generator)
-        # Using higher stability, lower similarity, and slower speed for meditative voice
+        # Voice settings for calm, measured meditation delivery
         audio_generator = client.text_to_speech.convert(
-            voice_id=voice_id,
-            text=practice_text,
-            model_id="eleven_multilingual_v2",  # High-quality model with natural prosody
-            voice_settings={
-                "stability": 0.75,  # Higher stability = more consistent, calmer delivery
-                "similarity_boost": 0.5,  # Lower boost = softer, less harsh voice
-                "speed": 0.85  # Slower speed for more meditative pacing
-            }
+            text=clean_text,
+            voice_id="pFZP5JQG7iQjIQuC4Bku",  # Lily - Velvety Actress
+            model_id="eleven_multilingual_v2",
+            voice_settings=VoiceSettings(
+                stability=0.85,         # Very high stability = calm, consistent, minimal variation
+                similarity_boost=0.8,   # High similarity = clearer, more controlled
+                style=0,                # No style = minimal expressiveness, very measured
+                use_speaker_boost=True, # Enhances voice clarity
+                speed=0.8               # 0.8 = 20% slower (0.25 to 4.0 range)
+            )
         )
 
-        # Save the audio file (save() handles the generator)
-        save(audio_generator, str(audio_path))
+        # Collect audio bytes
+        audio_bytes = b""
+        for chunk in audio_generator:
+            audio_bytes += chunk
 
-        print(f"✓ Audio generated: {audio_filename} (Voice: {voice_name} - calm meditative voice)")
-        return audio_filename
+        print(f"✓ Audio generated: {len(audio_bytes)} bytes (Voice: Lily - Velvety Actress @ 0.8x speed)")
+
+        # Upload to Supabase Storage
+        filename = f"practice_{practice_id}.mp3"
+
+        # Initialize Supabase client
+        supabase: Client = create_client(supabase_url, supabase_key)
+
+        # Upload to 'meditation-audio' bucket
+        # Create bucket if it doesn't exist (first time setup)
+        try:
+            response = supabase.storage.from_('meditation-audio').upload(
+                filename,
+                audio_bytes,
+                file_options={"content-type": "audio/mpeg", "upsert": "true"}
+            )
+            print(f"✓ Uploaded to Supabase Storage: {filename}")
+        except Exception as upload_error:
+            print(f"Upload error details: {upload_error}")
+            # If bucket doesn't exist, you'll need to create it in Supabase dashboard
+            print("NOTE: If bucket doesn't exist, create 'meditation-audio' bucket in Supabase Storage dashboard")
+            raise
+
+        # Get public URL
+        public_url = supabase.storage.from_('meditation-audio').get_public_url(filename)
+        print(f"✓ Public URL: {public_url}")
+
+        return public_url
 
     except Exception as e:
-        print(f"ERROR: Failed to generate audio with ElevenLabs: {e}")
+        print(f"ERROR: Failed to generate/upload audio: {e}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
         return None
+
+

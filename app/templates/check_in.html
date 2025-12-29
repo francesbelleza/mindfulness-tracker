@@ -10,26 +10,25 @@
 
   <form method="POST" action="{{ url_for('check_in') }}" class="mx-auto" style="max-width: 600px;">
 
-    <!-- Time of Day Selection -->
+    <!-- Time of Day Selection - COMMENTED OUT: Building morning habit with 1 check-in/day
     <div class="mb-5">
       <label class="form-label d-block text-center mb-4">
         When are you checking in?
       </label>
 
       <div class="time-grid">
-        <!-- Morning -->
         <input type="radio" class="btn-check" name="time_of_day" id="time-morning" value="Morning" required>
         <label class="time-card" for="time-morning">
           <div class="time-label">Morning</div>
         </label>
 
-        <!-- Night -->
         <input type="radio" class="btn-check" name="time_of_day" id="time-night" value="Night" required>
         <label class="time-card" for="time-night">
           <div class="time-label">Night</div>
         </label>
       </div>
     </div>
+    -->
 
     <!-- Mood Selection -->
     <div class="mb-5">

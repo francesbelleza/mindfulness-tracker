@@ -23,7 +23,7 @@
 ## step 2: AI- powered practice suggestion
 - The app sends the mood (and optional body/mind note) to an **AI wrapper** (OpenAI or Claude).
 - The AI returns a mindfulness practice and a journal prompt, selected from a pre-tagged internal dataset.
-  - Example suggestions:  
+  - Example suggestions (NOTE: yoga poses are not implemented only mindfulness practices):  
     - **Happy → Gratitude reflection**  
     - **Calm → Breath awareness practice**  
     - **Anxious → Grounding yoga pose**  
@@ -31,7 +31,6 @@
     
 **→ Possible User Choices:**
 - Proceed to journaling  
-- Exit after the practice  
 
 ---
 

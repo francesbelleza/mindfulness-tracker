@@ -41,7 +41,8 @@
           </div>
         </div>
         <audio id="audioPlayer" preload="metadata">
-          <source src="{{ url_for('static', filename='audio/' + practice.audio_file) }}" type="audio/mpeg">
+          <source src="{{ practice.audio_file }}">
+          <!-- Audio loaded from Supabase Storage -->
           Your browser does not support audio playback.
         </audio>
       </div>

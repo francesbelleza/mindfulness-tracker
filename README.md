@@ -39,12 +39,12 @@ It provides:
 - Fallback content system if API fails
 
 ### Natural Voice Meditation
-- **ElevenLabs Text-to-Speech** generates natural-sounding audio
-- Lily voice (Velvety Actress) - calm, meditative tone
+- **Google Cloud Text-to-Speech (WaveNet)** generates natural-sounding audio
+- en-US-Wavenet-F voice - calm, meditative female voice
 - Optimized settings:
   - Slower pacing (0.85x speed) for meditation
   - Three-tier pause system for natural breathing pauses
-  - Stability tuned for consistent delivery
+  - Professional-grade neural voice synthesis
 - Custom HTML5 audio player with:
   - Play/Pause controls
   - Progress bar with seek functionality
@@ -102,9 +102,9 @@ It provides:
 
 **AI & Voice:**
 - OpenAI API (GPT-3.5-turbo) - Text generation
-- ElevenLabs API (eleven_multilingual_v2) - Voice synthesis
+- Google Cloud Text-to-Speech (WaveNet) - Voice synthesis
 - Custom prompt engineering with pause notation
-- Natural voice meditation narration
+- Natural voice meditation narration with neural voices
 
 **Hosting:**
 - Flask development server (local)
@@ -157,7 +157,7 @@ mindfulness-tracker/
 - pip
 - PostgreSQL (or use Supabase)
 - OpenAI API key
-- ElevenLabs API key
+- Google Cloud account with Text-to-Speech API enabled
 
 ### Installation
 
@@ -186,7 +186,7 @@ mindfulness-tracker/
    DATABASE_URL=your_database_url
    SECRET_KEY=your_secret_key
    OPENAI_API_KEY=your_openai_api_key
-   ELEVENLABS_API_KEY=your_elevenlabs_api_key
+   GOOGLE_APPLICATION_CREDENTIALS=/path/to/google-credentials.json
    ```
 
 5. **Initialize database:**
