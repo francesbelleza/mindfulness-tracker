@@ -335,7 +335,8 @@ def _convert_pauses_to_ssml(text):
 def generate_audio(practice_text, practice_id, mood):
     """
     Generate natural-sounding audio using ElevenLabs TTS and upload to Supabase Storage.
-    Uses Lily (Velvety Actress voice) with slower delivery (0.8x speed) for meditation.
+    Uses Lily (Velvety Actress) with eleven_multilingual_v2 model for calm meditation delivery.
+    Settings: Stability 0.85, Style 0, Speed 0.8x for measured, non-dramatic tone.
 
     Args:
         practice_text (str): The practice description text with ellipsis notation

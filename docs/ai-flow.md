@@ -71,8 +71,9 @@ If the AI call fails:
 ---
 
 ## ai wrapper details
-- **Text Generation:** OpenAI GPT-3.5-turbo
-- **Voice Synthesis:** Google Cloud Text-to-Speech (WaveNet)
-  - Voice: en-US-Wavenet-F (calm female voice)
-  - Speaking rate: 0.85x (slower for meditation)
-  - Cost: ~$0.000016 per character (62x cheaper than ElevenLabs)
+- **Text Generation:** OpenAI GPT-4o
+- **Voice Synthesis:** ElevenLabs TTS (eleven_multilingual_v2)
+  - Voice: Lily (Velvety Actress) - calm female British voice
+  - Speaking rate: 0.8x (20% slower for meditation)
+  - Settings: Stability 0.85, Style 0, Speed 0.8
+  - Audio storage: Supabase Storage (meditation-audio bucket)

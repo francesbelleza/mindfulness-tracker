@@ -8,26 +8,9 @@
 ## 🎯 Priority Tasks (in order)
 
 ### 1. ⭐ #1 PRIORITY: Research & Find Better Voice
-- Explore ElevenLabs quality vs cost
-- Test different Google Cloud TTS voices (WaveNet-D, WaveNet-G, Journey-D, Journey-F, Neural2 variants)
-- Research alternatives: Amazon Polly Neural, Microsoft Azure Speech, Play.ht, Murf.ai
-- Compare quality vs cost vs naturalness
-- Make final decision on voice provider
+[x] DONE --> WENT BACK TO ELEVEN LABS
+[] make sure other features are working just fine before moving to sprint 5
 
-### 2. Test New GPT Meditation Pacing
-- Restart Flask app
-- Run `python3 clear_data.py` to clear old practices
-- Create new check-in and test meditation
-- Verify:
-  - Duration is 1-2.5 minutes (not 6+ minutes)
-  - Natural comma pauses (not excessive)
-  - Strategic pause locations (transitions, breathing cues only)
-  - Speaking rate 0.80 sounds calm and meditative
-
-### 3. Fix Spacing if Still Not Right
-- Adjust pause timings in `_convert_pauses_to_ssml()` if needed
-- Adjust speaking rate in `generate_audio()` if needed
-- Update GPT prompt for better comma/ellipsis usage
 
 ---
 
@@ -67,9 +50,9 @@
 - [ ] Add loading states for async operations
 - [ ] Improve error messages and user feedback
 
-
 ### Phase 6: Think about RLS 
 - [] research how to protect user data before shipping on supabase
+
 ---
 
 ## 🚀 Sprint 6 Features (Quick Refresher)

@@ -27,7 +27,7 @@ and intentional flow.
   - Users can check in twice per day (morning and night) with time-of-day selection, mood emoji, and body feeling. AI generates context-appropriate practices based on time of day.
 
 [✅] **AI-Powered Practice Suggestions with Natural Voice**
-  - After checking in, the app uses OpenAI API to suggest personalized mindfulness practices and journal prompts. ElevenLabs TTS generates natural meditation audio with optimized pacing.
+  - After checking in, the app uses OpenAI API to suggest personalized mindfulness practices and journal prompts. ElevenLabs TTS (Lily voice) generates natural meditation audio with optimized pacing and Supabase cloud storage.
 
 [✅] **Practice Display Page with Audio Player**
   - The AI-generated mindfulness practice is shown with title, description, practice type badge, and custom HTML5 audio player with play/pause controls and progress bar.
@@ -68,10 +68,11 @@ and intentional flow.
 - SQLite for local testing (optional)
 
 **AI/nlp**
-- OpenAI API (GPT-3.5-turbo)
-- Google Cloud Text-to-Speech API (WaveNet)
+- OpenAI API (GPT-4o)
+- ElevenLabs TTS API (eleven_multilingual_v2)
 - Custom prompt engineering with mood-based practice generation
-- Natural voice meditation narration with neural voices and pause optimization
+- Natural voice meditation narration with Lily voice and pause optimization
+- Supabase Storage for meditation audio files
 - Fallback content system for API failures
 
 ---
@@ -124,11 +125,12 @@ and intentional flow.
   - [x] Install `openai` Python package
   - [x] Create AI service module for API calls
   - [x] Design meditation-style prompt with pause notation
-- [x] Set up Google Cloud TTS integration
-  - [x] Add Google Cloud credentials to `.env`
-  - [x] Install `google-cloud-texttospeech` Python package
-  - [x] Test and select optimal voice (en-US-Wavenet-F)
-  - [x] Optimize voice settings (speaking rate, pitch)
+- [x] Set up ElevenLabs TTS integration
+  - [x] Add ElevenLabs API key to `.env`
+  - [x] Install `elevenlabs` Python package
+  - [x] Test and select optimal voice (Lily - Velvety Actress)
+  - [x] Optimize voice settings (stability, style, speed)
+  - [x] Set up Supabase Storage for audio files
 - [x] Create database models:
   - [x] `Practice` model (exercise suggestions + audio file)
   - [x] `JournalPrompt` model (reflection prompts)
@@ -137,8 +139,9 @@ and intentional flow.
   - [x] Fetch user's latest check-in (mood + body feeling)
   - [x] Call OpenAI API with mood-based prompt
   - [x] Parse AI response to extract practice + journal prompt
-  - [x] Generate natural AI voice audio via Google Cloud TTS
-  - [x] Store practice, prompt, and audio filename in database
+  - [x] Generate natural AI voice audio via ElevenLabs TTS
+  - [x] Upload audio to Supabase Storage
+  - [x] Store practice, prompt, and audio URL in database
   - [x] Display on practice page
 - [x] Enhance `/practice` template:
   - [x] Show AI-generated mindfulness practice
@@ -156,10 +159,11 @@ and intentional flow.
   - [x] Add fallback content for each mood if API fails
 - [x] Voice optimization:
   - [x] Test OpenAI TTS (rejected - robotic)
-  - [x] Test ElevenLabs (replaced due to cost)
-  - [x] Migrate to Google Cloud TTS WaveNet
-  - [x] Optimize for meditation pacing (0.85x speaking rate)
-  - [x] Select calm female voice (en-US-Wavenet-F)
+  - [x] Test Google Cloud TTS (replaced - returned to ElevenLabs)
+  - [x] Migrate to ElevenLabs TTS with Lily voice
+  - [x] Optimize for meditation pacing (0.8x speed)
+  - [x] Select calm female British voice (Lily - Velvety Actress)
+  - [x] Fine-tune settings: stability 0.85, style 0, speed 0.8
 
 ---
 

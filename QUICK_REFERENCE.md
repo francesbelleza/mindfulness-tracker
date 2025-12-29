@@ -28,7 +28,7 @@ http://127.0.0.1:5000
 | `app/__init__.py` | App factory, Flask extensions |
 | `app/models.py` | Database models (User, CheckIn, Practice, etc.) |
 | `app/mindfulness_tracker_app.py` | All routes and logic |
-| `app/ai_service.py` | OpenAI & Google Cloud TTS integration |
+| `app/ai_service.py` | OpenAI & ElevenLabs TTS integration |
 | `app/config.py` | Configuration from .env |
 | `.env` | Environment variables (API keys, database) |
 | `PLANNING.md` | Sprint planning and features |
@@ -97,7 +97,7 @@ flask db downgrade
 - `description`: Text (AI-generated guided meditation)
 - `practice_type`: String(50) - breathing, meditation, movement, grounding
 - `journal_prompt`: Text (AI-generated)
-- `audio_file`: String(255) - Google Cloud TTS filename
+- `audio_file`: String(255) - Supabase Storage URL (ElevenLabs TTS)
 - `created_at`: DateTime
 
 ### JournalEntry
@@ -158,13 +158,14 @@ See [docs/UI_DESIGN.md](docs/UI_DESIGN.md) for complete design system.
 ```bash
 FLASK_APP=run.py
 FLASK_ENV=development
-DATABASE_URL=postgresql://user:pass@host/db  # Production
-DATABASE_URL=sqlite:///mindfulness_tracker.db  # Development
+DATABASE_URL=postgresql://user:pass@host/db  # Supabase PostgreSQL
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-supabase-anon-key
 SECRET_KEY=your-secret-key-here
 
 # API Keys
 OPENAI_API_KEY=sk-...
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
+ELEVENLABS_API_KEY=sk_...
 ```
 
 ---
@@ -203,7 +204,7 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 | 0 | ✅ Complete | Setup, database, git |
 | 1 | ✅ Complete | User authentication |
 | 2 | ✅ Complete | Daily check-in flow |
-| 3 | ✅ Complete | AI practices + natural voice (Google Cloud TTS) |
+| 3 | ✅ Complete | AI practices + natural voice (ElevenLabs TTS) |
 | 4 | ✅ Complete | Journal & feedback system + structured data |
 | 5 | 🚧 In Progress | Reflection Space, Profile, Settings, Privacy |
 
@@ -216,8 +217,8 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 - [x] Twice-daily check-ins (morning & night)
 - [x] 5 moods (Happy, Calm, Anxious, Angry, Sad)
 - [x] Time-based practice restrictions
-- [x] AI-generated practices (OpenAI GPT-3.5)
-- [x] Text-to-speech audio (Google Cloud TTS WaveNet)
+- [x] AI-generated practices (OpenAI GPT-4o)
+- [x] Text-to-speech audio (ElevenLabs Lily voice)
 - [x] Minimum 1-minute practice duration
 - [x] Journal prompts with voice input
 - [x] Time-specific reflection questions
@@ -233,9 +234,9 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 ## 🐛 Common Issues
 
 ### "Audio not playing"
-- **Fix:** Check `app/static/audio/` directory exists
-- **Fix:** Verify Google Cloud credentials in `.env`
-- **Fix:** Ensure GOOGLE_APPLICATION_CREDENTIALS path is correct
+- **Fix:** Check Supabase Storage bucket `meditation-audio` is accessible
+- **Fix:** Verify ElevenLabs API key in `.env`
+- **Fix:** Ensure SUPABASE_URL and SUPABASE_KEY are set correctly
 
 ### "Time restriction not working"
 - **Fix:** Check server time matches expected timezone
@@ -264,7 +265,8 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 
 **AI/Audio:**
 - openai 2.x
-- google-cloud-texttospeech 2.17.2
+- elevenlabs 2.x
+- supabase 2.x
 
 **Utilities:**
 - python-dotenv
@@ -278,8 +280,8 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 2. **Restart Flask after .env changes:** Ctrl+C, then run again
 3. **Test time restrictions:** Mock current_hour in check_in route
 4. **Clear database for testing:** `python3 clear_data.py`
-5. **Check AI costs:** Monitor OpenAI & Google Cloud TTS usage
-6. **Google Cloud setup:** See `docs/GOOGLE_CLOUD_SETUP.md` for TTS setup
+5. **Check AI costs:** Monitor OpenAI & ElevenLabs TTS usage
+6. **Supabase Storage:** Audio files stored in `meditation-audio` bucket
 7. **Use git branches:** Create feature branches for new work
 
 ---
@@ -318,12 +320,14 @@ git push origin branch-name
 **Documentation:**
 - Flask: https://flask.palletsprojects.com/
 - OpenAI: https://platform.openai.com/docs
-- Google Cloud TTS: https://cloud.google.com/text-to-speech/docs
+- ElevenLabs: https://elevenlabs.io/docs
+- Supabase: https://supabase.com/docs
 - Formspree: https://formspree.io/forms
 
 **Tools:**
 - OpenAI Platform: https://platform.openai.com/
-- Google Cloud Console: https://console.cloud.google.com/
+- ElevenLabs Dashboard: https://elevenlabs.io/app
+- Supabase Dashboard: https://supabase.com/dashboard
 - Formspree: https://formspree.io/f/mvzorgoz
 
 ---

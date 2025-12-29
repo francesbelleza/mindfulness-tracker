@@ -39,12 +39,14 @@ It provides:
 - Fallback content system if API fails
 
 ### Natural Voice Meditation
-- **Google Cloud Text-to-Speech (WaveNet)** generates natural-sounding audio
-- en-US-Wavenet-F voice - calm, meditative female voice
-- Optimized settings:
-  - Slower pacing (0.85x speed) for meditation
-  - Three-tier pause system for natural breathing pauses
-  - Professional-grade neural voice synthesis
+- **ElevenLabs TTS (eleven_multilingual_v2)** generates natural-sounding audio
+- Lily (Velvety Actress) - calm, soothing female voice
+- Optimized settings for meditation:
+  - Slower pacing (0.8x speed) for calm delivery
+  - High stability (0.85) for consistent, non-dramatic tone
+  - Natural pause handling with ellipses
+  - Professional-grade AI voice synthesis
+- Audio stored in Supabase Storage cloud
 - Custom HTML5 audio player with:
   - Play/Pause controls
   - Progress bar with seek functionality
@@ -100,11 +102,14 @@ It provides:
 - PostgreSQL (via Supabase) - Production
 - SQLite - Local development/testing
 
+**Storage:**
+- Supabase Storage - Cloud storage for meditation audio files
+
 **AI & Voice:**
-- OpenAI API (GPT-3.5-turbo) - Text generation
-- Google Cloud Text-to-Speech (WaveNet) - Voice synthesis
+- OpenAI API (GPT-4o) - Text generation for personalized practices
+- ElevenLabs API (eleven_multilingual_v2) - Voice synthesis with Lily voice
 - Custom prompt engineering with pause notation
-- Natural voice meditation narration with neural voices
+- Natural voice meditation narration with AI voices
 
 **Hosting:**
 - Flask development server (local)
@@ -120,9 +125,8 @@ mindfulness-tracker/
 │   ├── __init__.py              # Flask app factory
 │   ├── models.py                # Database models (User, CheckIn, Practice, JournalEntry, PracticeFeedback)
 │   ├── mindfulness_tracker_app.py  # Routes and logic
-│   ├── ai_service.py            # OpenAI + ElevenLabs integration
-│   ├── static/
-│   │   └── audio/               # Generated meditation audio files
+│   ├── ai_service.py            # OpenAI + ElevenLabs integration (uploads to Supabase Storage)
+│   ├── static/                  # Static assets
 │   └── templates/
 │       ├── base.html            # Base template
 │       ├── index.html           # Landing page
@@ -157,7 +161,8 @@ mindfulness-tracker/
 - pip
 - PostgreSQL (or use Supabase)
 - OpenAI API key
-- Google Cloud account with Text-to-Speech API enabled
+- ElevenLabs API key
+- Supabase account (for database and storage)
 
 ### Installation
 
@@ -183,10 +188,12 @@ mindfulness-tracker/
    ```
    FLASK_APP=run.py
    FLASK_ENV=development
-   DATABASE_URL=your_database_url
+   DATABASE_URL=your_supabase_postgresql_url
+   SUPABASE_URL=your_supabase_project_url
+   SUPABASE_KEY=your_supabase_anon_key
    SECRET_KEY=your_secret_key
    OPENAI_API_KEY=your_openai_api_key
-   GOOGLE_APPLICATION_CREDENTIALS=/path/to/google-credentials.json
+   ELEVENLABS_API_KEY=your_elevenlabs_api_key
    ```
 
 5. **Initialize database:**
